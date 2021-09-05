@@ -1,0 +1,78 @@
+buildscript {
+    ext {
+        springCoreVersion = '5.3.8'
+        springDataVersion = '3.2.2'
+        springDataJpaVersion = '2.5.2'
+        javaxAnnotationVersion = '1.3.2'
+        //MIRAI_VERSION = '2.7-M2'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        
+    }
+}
+
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.4.32' 
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.4.32'
+    id 'net.mamoe.mirai-console' version "${MIRAI_VERSION}"
+}
+
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'java-library'
+
+
+
+group = 'PrinzEugenPlugin'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+    //removeIf { it is MavenArtifactRepository && it.url.host == "dl.bintray.com" }
+    mavenCentral()
+    jcenter()
+    maven { url 'https://jitpack.io' }
+}
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
+test {
+    useJUnitPlatform()
+}
+
+
+
+
+
+
+dependencies {
+
+    implementation 'io.github.openfeign:feign-jackson:11.1'
+    implementation 'io.github.openfeign:feign-core:11.1'
+    
+    implementation 'com.github.hundun000:mirai-fleet-framework:f8c7d68059'
+    
+    compileOnly 'org.projectlombok:lombok:1.18.4'
+    annotationProcessor 'org.projectlombok:lombok:1.18.4'
+}
+
+
+
+
+
+
+
+
+
+
+
+
