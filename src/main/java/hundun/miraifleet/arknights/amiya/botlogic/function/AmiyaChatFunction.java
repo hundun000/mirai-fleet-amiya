@@ -28,6 +28,7 @@ import net.mamoe.mirai.event.events.GroupMessageEvent;
 import net.mamoe.mirai.event.events.NudgeEvent;
 import net.mamoe.mirai.message.code.MiraiCode;
 import net.mamoe.mirai.message.data.At;
+import net.mamoe.mirai.message.data.Audio;
 import net.mamoe.mirai.message.data.Image;
 import net.mamoe.mirai.message.data.MessageChain;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
@@ -208,6 +209,18 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
                             .plus(NOT_SUPPORT_RESOURCE_PLACEHOLDER)
                             );
                 }
+            }
+        } else if (message.contains("damedane")) {
+            Audio voice = subject.uploadVoice(damedaneVoiceExternalResource);
+            if (voice != null) {
+                subject.sendMessage(
+                        new PlainText("")
+                        .plus(voice)
+                        );
+            } else {
+                subject.sendMessage(
+                        new PlainText(NOT_SUPPORT_RESOURCE_PLACEHOLDER)
+                        );
             }
         }
     }
