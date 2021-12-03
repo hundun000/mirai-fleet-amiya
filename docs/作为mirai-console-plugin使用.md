@@ -21,7 +21,8 @@
 [用PermissionCommand授权群员使用指令的权限](https://github.com/mamoe/mirai-console/blob/master/docs/BuiltInCommands.md#%E6%8E%88%E4%BA%88%E4%B8%80%E4%B8%AA%E7%94%A8%E6%88%B7%E6%89%A7%E8%A1%8C%E6%89%80%E6%9C%89%E6%8C%87%E4%BB%A4%E7%9A%84%E6%9D%83%E9%99%90)
 
 用PermissionCommand授权特殊权限：
-> /perm permit m111111.222222 hundun.fleet.amiya.cos:INSTANCE
+> /perm permit m111111.222222 hundun.fleet.amiya.cos:INSTANCE  
+> 
 > 表示bot账号222222在群1111111启用本插件
 
 注意，这里的222222是bot自身的账号。
