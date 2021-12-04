@@ -59,7 +59,7 @@ dependencies {
     implementation 'io.github.openfeign:feign-jackson:11.1'
     implementation 'io.github.openfeign:feign-core:11.1'
     
-    implementation 'com.github.hundun000:mirai-fleet-framework:b4ee464dfc'
+    implementation 'com.github.hundun000:mirai-fleet-framework:684f092687'
     implementation 'com.github.manabreak:libclicker2:0.1'
     
     
