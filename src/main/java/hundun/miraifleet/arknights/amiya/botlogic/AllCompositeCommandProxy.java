@@ -38,6 +38,26 @@ public class AllCompositeCommandProxy extends CompositeCommand {
         botLogic.reminderFunction.listHourlyChatConfig(sender);
     }
     
+    @SubCommand("查询提醒")
+    public void listReminderListChatConfig(CommandSender sender) {
+        botLogic.reminderFunction.listReminderListChatConfig(sender);
+    }
+    
+    @SubCommand("删除提醒")
+    public void deleteReminderListChatConfig(CommandSender sender, int id) {
+        botLogic.reminderFunction.deleteReminderListChatConfig(sender, id);
+    }
+    
+    @SubCommand("创建提醒")
+    public void insertReminderListChatConfig(CommandSender sender, 
+            String cornRawFomat,
+            String countRawFomat,
+            String text
+            ) {
+        botLogic.reminderFunction.insertReminderListChatConfig(sender, cornRawFomat, countRawFomat, text);
+    }
+    
+    
     @SubCommand("微博订阅")
     public void listListen(CommandSender sender) {
         botLogic.weiboFunction.listListen(sender);

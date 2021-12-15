@@ -16,6 +16,7 @@ import hundun.miraifleet.framework.core.function.AsCommand;
 import hundun.miraifleet.framework.core.function.AsListenerHost;
 import hundun.miraifleet.framework.core.function.BaseFunction;
 import hundun.miraifleet.framework.core.function.FunctionReplyReceiver;
+import hundun.miraifleet.framework.core.helper.repository.SingletonDocumentRepository;
 import hundun.miraifleet.framework.starter.botlogic.function.RepeatFunction.SessionData;
 import hundun.miraifleet.framework.starter.botlogic.function.reminder.config.HourlyChatConfig;
 import net.mamoe.mirai.console.command.CommandSender;
@@ -54,7 +55,8 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
     int forceTodayIsWorkday = -1;
     List<ExternalResource> selfNudgeFaces = new ArrayList<>();
     Map<Long, ExternalResource> otherNudgeFaces = new HashMap<>();
-
+    
+    Map<String, List<String>> listenConfigData = new HashMap<>();
     
     public AmiyaChatFunction(
             BaseBotLogic botLogic,
@@ -69,6 +71,18 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
                 null
                 );
         initExternalResource();
+        SingletonDocumentRepository<ListenConfig> listenConfigRepository = new SingletonDocumentRepository<>(plugin, resolveFunctionConfigFile("ListenConfig.json"), ListenConfig.class);
+        ListenConfig listenConfig = listenConfigRepository.findSingleton();
+        if (listenConfig != null && listenConfig.getListens() != null) {
+            listenConfig.getListens().entrySet().forEach(entry -> {
+                String[] keys = entry.getKey().split("\\|");
+                for (String key : keys) {
+                    listenConfigData.put(key, entry.getValue());
+                }
+            });
+            
+        }
+        
     }
     
     private void initExternalResource() {
@@ -222,6 +236,14 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
                         new PlainText(NOT_SUPPORT_RESOURCE_PLACEHOLDER)
                         );
             }
+        } else if (listenConfigData.containsKey(message)){
+            List<String> candidates = listenConfigData.get(message);
+            int index = (int) (Math.random() * candidates.size());
+            String reply = candidates.get(index);
+            log.info("use listenConfig candidates index = " + index);
+            subject.sendMessage(
+                    reply
+                    );
         }
     }
     
