@@ -17,6 +17,7 @@ public class AmiyaBotLogic extends BaseBotLogic {
 
     AmiyaChatFunction amiyaChatFunction;
     
+    MiraiCodeFunction miraiCodeFunction;
     RepeatFunction repeatFunction;
     
     WeiboFunction weiboFunction;
@@ -27,17 +28,26 @@ public class AmiyaBotLogic extends BaseBotLogic {
     public AmiyaBotLogic(JvmPlugin plugin) {
         super(plugin, "阿米娅");
         
-        amiyaChatFunction = new AmiyaChatFunction(this, plugin, characterName);
+        amiyaChatFunction = new AmiyaChatFunction(this, plugin, characterName,
+                AmiyaDefaultConfigAndData.listenConfigDefaultDataSupplier()
+                );
         functions.add(amiyaChatFunction);
         
         repeatFunction = new RepeatFunction(this, plugin, characterName);
         functions.add(repeatFunction);
         
-        weiboFunction = new WeiboFunction(this, plugin, characterName);
+        weiboFunction = new WeiboFunction(this, plugin, characterName, 
+                AmiyaDefaultConfigAndData.weiboConfigDefaultDataSupplier());
         functions.add(weiboFunction);
         
-        reminderFunction = new ReminderFunction(this, plugin, characterName);
+        reminderFunction = new ReminderFunction(this, plugin, characterName, 
+                AmiyaDefaultConfigAndData.reminderListDefaultDataSupplier(),
+                AmiyaDefaultConfigAndData.hourlyChatConfigDefaultDataSupplier()
+                );
         functions.add(reminderFunction);
+        
+        miraiCodeFunction = new MiraiCodeFunction(this, plugin, characterName);
+        functions.add(miraiCodeFunction);
         
         allCompositeCommandProxy = new AllCompositeCommandProxy(this, plugin, characterName);
     }

@@ -12,7 +12,7 @@
 
 - ConfigAndData.zip
 
-解压后得到config、data合并至mirai-console的同名文件夹。
+解压后得到config、data合并至mirai-console的同名文件夹。若解压后没有config文件夹，说明该版本已不需要人工准备文件夹，插件会自动使用样例值创建。
 
 ### 3. 配置mirai-console权限
 

@@ -3,6 +3,7 @@ package hundun.miraifleet.arknights.amiya.botlogic.function;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,7 +62,8 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
     public AmiyaChatFunction(
             BaseBotLogic botLogic,
             JvmPlugin plugin, 
-            String characterName
+            String characterName, 
+            Supplier<Map<String, ListenConfig>> supplier
             ) {
         super(
                 botLogic,
@@ -71,7 +73,12 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
                 null
                 );
         initExternalResource();
-        SingletonDocumentRepository<ListenConfig> listenConfigRepository = new SingletonDocumentRepository<>(plugin, resolveFunctionConfigFile("ListenConfig.json"), ListenConfig.class);
+        SingletonDocumentRepository<ListenConfig> listenConfigRepository = new SingletonDocumentRepository<>(
+                plugin, 
+                resolveFunctionConfigFile("ListenConfig.json"), 
+                ListenConfig.class,
+                supplier
+                );
         ListenConfig listenConfig = listenConfigRepository.findSingleton();
         if (listenConfig != null && listenConfig.getListens() != null) {
             listenConfig.getListens().entrySet().forEach(entry -> {
@@ -85,6 +92,18 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
         
     }
     
+    List<String> validEnds = Arrays.asList("gif", "png", "bmp", "jpg");
+    private boolean validAsImage(File file) {
+        boolean valid = false;
+        for (String validEnd : validEnds) {
+            if (file.getName().endsWith(validEnd) || file.getName().endsWith(validEnd.toUpperCase())) {
+                valid = true;
+            }
+        }
+        return valid;
+    }
+    
+    
     private void initExternalResource() {
         try {
             cannotRelaxExternalResource = ExternalResource.create(plugin.resolveDataFile(functionName + File.separator + "cannotRelax.png"));
@@ -94,6 +113,9 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
             File facesFolder = plugin.resolveDataFile(functionName + File.separator + "selfNudgeFaces");
             if (facesFolder.exists() && facesFolder.isDirectory()) {
                 for (File faceFile : facesFolder.listFiles()) {
+                    if (!validAsImage(faceFile)) {
+                        continue;
+                    }
                     selfNudgeFaces.add(ExternalResource.create(faceFile));
                 }
                 log.info("load faces size = " + selfNudgeFaces.size());
@@ -102,6 +124,9 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
             File otherNudgeFacesFolder = plugin.resolveDataFile(functionName + File.separator + "otherNudgeFaces");
             if (otherNudgeFacesFolder.exists() && otherNudgeFacesFolder.isDirectory()) {
                 for (File faceFile : otherNudgeFacesFolder.listFiles()) {
+                    if (!validAsImage(faceFile)) {
+                        continue;
+                    }
                     try {
                         String idPart = faceFile.getName().substring(0, faceFile.getName().indexOf("."));
                         Long id = Long.valueOf(idPart);
