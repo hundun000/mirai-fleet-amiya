@@ -3,6 +3,7 @@ package hundun.miraifleet.arknights.amiya;
 import org.jetbrains.annotations.NotNull;
 
 import hundun.miraifleet.arknights.amiya.botlogic.AmiyaBotLogic;
+import hundun.miraifleet.framework.TestA;
 import net.mamoe.mirai.console.extension.PluginComponentStorage;
 import net.mamoe.mirai.console.plugin.jvm.JavaPlugin;
 import net.mamoe.mirai.console.plugin.jvm.JvmPluginDescriptionBuilder;
@@ -31,6 +32,7 @@ public static final AmiyaPlugin INSTANCE = new AmiyaPlugin();
     
     @Override
     public void onEnable() {
+        new TestA();
         botLogic = new AmiyaBotLogic(this);
         botLogic.onBotLogicEnable();
     }
