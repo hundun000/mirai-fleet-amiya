@@ -4,6 +4,7 @@ import hundun.miraifleet.arknights.amiya.botlogic.function.AmiyaChatFunction;
 import hundun.miraifleet.framework.core.botlogic.BaseBotLogic;
 import hundun.miraifleet.framework.starter.botlogic.function.MiraiCodeFunction;
 import hundun.miraifleet.framework.starter.botlogic.function.RepeatFunction;
+import hundun.miraifleet.framework.starter.botlogic.function.drive.DriveFunction;
 import hundun.miraifleet.framework.starter.botlogic.function.reminder.ReminderFunction;
 import hundun.miraifleet.framework.starter.botlogic.function.weibo.WeiboFunction;
 import net.mamoe.mirai.console.command.CommandManager;
@@ -22,6 +23,7 @@ public class AmiyaBotLogic extends BaseBotLogic {
     
     WeiboFunction weiboFunction;
     ReminderFunction reminderFunction;
+    DriveFunction driveFunction;
     
     AllCompositeCommandProxy allCompositeCommandProxy;
     
@@ -48,6 +50,9 @@ public class AmiyaBotLogic extends BaseBotLogic {
         
         miraiCodeFunction = new MiraiCodeFunction(this, plugin, characterName);
         functions.add(miraiCodeFunction);
+        
+        driveFunction = new DriveFunction(this, plugin, characterName);
+        functions.add(driveFunction);
         
         allCompositeCommandProxy = new AllCompositeCommandProxy(this, plugin, characterName);
     }

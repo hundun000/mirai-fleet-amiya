@@ -73,5 +73,9 @@ public class AllCompositeCommandProxy extends CompositeCommand {
         botLogic.weiboFunction.listTopForUid(sender, name);
     }
 
+    @SubCommand("驾驶")
+    public void chat(CommandSender sender, String messageCode) {
+        botLogic.driveFunction.chat(sender, messageCode);
+    }
 
 }

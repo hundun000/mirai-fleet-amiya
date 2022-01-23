@@ -25,7 +25,11 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'java-library'
 
-
+//eclipse {
+//    classpath {
+//        containers 'org.jetbrains.kotlin.core.KOTLIN_CONTAINER'
+//    }
+//}
 
 group = 'AmiyaPlugin'
 version = '0.0.1-SNAPSHOT'
@@ -59,7 +63,7 @@ dependencies {
     implementation 'io.github.openfeign:feign-jackson:11.1'
     implementation 'io.github.openfeign:feign-core:11.1'
     
-    implementation 'com.github.hundun000:mirai-fleet-framework:a30ae22fc4'
+    implementation 'com.github.hundun000:mirai-fleet-framework:c1744f81a9'
     
     compileOnly 'org.projectlombok:lombok:1.18.4'
     annotationProcessor 'org.projectlombok:lombok:1.18.4'
