@@ -63,7 +63,13 @@ dependencies {
     implementation 'io.github.openfeign:feign-jackson:11.1'
     implementation 'io.github.openfeign:feign-core:11.1'
     
-    implementation 'com.github.hundun000:mirai-fleet-framework:c1744f81a9'
+    implementation 'com.github.hundun000:mirai-fleet-framework:70029191ce'
+    
+    // for musicPlugin
+    implementation("net.mamoe.yamlkt:yamlkt:0.10.2")
+    implementation 'com.google.code.gson:gson:2.8.6'
+    
+    
     
     compileOnly 'org.projectlombok:lombok:1.18.4'
     annotationProcessor 'org.projectlombok:lombok:1.18.4'

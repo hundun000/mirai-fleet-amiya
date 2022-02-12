@@ -25,8 +25,6 @@ public class AmiyaBotLogic extends BaseBotLogic {
     ReminderFunction reminderFunction;
     DriveFunction driveFunction;
     
-    AllCompositeCommandProxy allCompositeCommandProxy;
-    
     public AmiyaBotLogic(JvmPlugin plugin) {
         super(plugin, "阿米娅");
         
@@ -38,11 +36,13 @@ public class AmiyaBotLogic extends BaseBotLogic {
         repeatFunction = new RepeatFunction(this, plugin, characterName);
         functions.add(repeatFunction);
         
-        weiboFunction = new WeiboFunction(this, plugin, characterName, 
+        weiboFunction = new WeiboFunction(this, plugin, characterName,
+                true,                
                 AmiyaDefaultConfigAndData.weiboConfigDefaultDataSupplier());
         functions.add(weiboFunction);
         
         reminderFunction = new ReminderFunction(this, plugin, characterName, 
+                true,  
                 AmiyaDefaultConfigAndData.reminderListDefaultDataSupplier(),
                 AmiyaDefaultConfigAndData.hourlyChatConfigDefaultDataSupplier()
                 );
@@ -51,18 +51,11 @@ public class AmiyaBotLogic extends BaseBotLogic {
         miraiCodeFunction = new MiraiCodeFunction(this, plugin, characterName);
         functions.add(miraiCodeFunction);
         
-        driveFunction = new DriveFunction(this, plugin, characterName);
+        driveFunction = new DriveFunction(this, plugin, characterName, true);
         functions.add(driveFunction);
         
         allCompositeCommandProxy = new AllCompositeCommandProxy(this, plugin, characterName);
     }
-    
-    @Override
-    public void onBotLogicEnable() {
-        super.onBotLogicEnable();
-        
-        CommandManager.INSTANCE.registerCommand(allCompositeCommandProxy, false);
-    }
-    
+
 
 }

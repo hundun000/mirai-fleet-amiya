@@ -13,15 +13,17 @@ import java.util.function.Supplier;
 import org.jetbrains.annotations.NotNull;
 
 import hundun.miraifleet.framework.core.botlogic.BaseBotLogic;
-import hundun.miraifleet.framework.core.function.AsCommand;
 import hundun.miraifleet.framework.core.function.AsListenerHost;
 import hundun.miraifleet.framework.core.function.BaseFunction;
 import hundun.miraifleet.framework.core.function.FunctionReplyReceiver;
 import hundun.miraifleet.framework.core.helper.repository.SingletonDocumentRepository;
 import hundun.miraifleet.framework.starter.botlogic.function.RepeatFunction.SessionData;
 import hundun.miraifleet.framework.starter.botlogic.function.reminder.config.HourlyChatConfig;
+import net.mamoe.mirai.console.command.AbstractCommand;
+import net.mamoe.mirai.console.command.BuiltInCommands;
+import net.mamoe.mirai.console.command.CommandManager;
 import net.mamoe.mirai.console.command.CommandSender;
-
+import net.mamoe.mirai.console.internal.command.CommandManagerImpl;
 import net.mamoe.mirai.console.plugin.jvm.JvmPlugin;
 import net.mamoe.mirai.contact.Contact;
 import net.mamoe.mirai.contact.Group;
@@ -42,7 +44,6 @@ import net.mamoe.mirai.utils.ExternalResource;
  * @author hundun
  * Created on 2021/08/09
  */
-@AsCommand
 @AsListenerHost
 public class AmiyaChatFunction extends BaseFunction<Void> {
 
@@ -70,6 +71,7 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
                 plugin, 
                 characterName, 
                 "AmiyaChatFunction", 
+                true,
                 null
                 );
         initExternalResource();
@@ -166,13 +168,13 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
     }
     
     
-    @SubCommand("测试闲聊")
-    public void chatFromCommand(CommandSender sender, String testText) {
-        if (!checkCosPermission(sender)) {
-            return;
-        }
-        chat(new FunctionReplyReceiver(sender, plugin.getLogger()), testText);
-    }
+//    @SubCommand("测试闲聊")
+//    public void chatFromCommand(CommandSender sender, String testText) {
+//        if (!checkCosPermission(sender)) {
+//            return;
+//        }
+//        chat(new FunctionReplyReceiver(sender, plugin.getLogger()), testText);
+//    }
     
     
     @EventHandler
@@ -270,6 +272,12 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
                     reply
                     );
         }
+    }
+
+
+    @Override
+    public AbstractCommand provideCommand() {
+        return null;
     }
     
 
