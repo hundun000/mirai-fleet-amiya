@@ -2,11 +2,14 @@ package hundun.miraifleet.arknights.amiya.botlogic;
 
 import hundun.miraifleet.arknights.amiya.botlogic.function.AmiyaChatFunction;
 import hundun.miraifleet.framework.core.botlogic.BaseBotLogic;
+import hundun.miraifleet.framework.starter.botlogic.function.CharacterHelpFunction;
 import hundun.miraifleet.framework.starter.botlogic.function.MiraiCodeFunction;
 import hundun.miraifleet.framework.starter.botlogic.function.RepeatFunction;
 import hundun.miraifleet.framework.starter.botlogic.function.drive.DriveFunction;
 import hundun.miraifleet.framework.starter.botlogic.function.reminder.ReminderFunction;
 import hundun.miraifleet.framework.starter.botlogic.function.weibo.WeiboFunction;
+import hundun.miraifleet.music.share.function.music.MusicCompositeFunction;
+import hundun.miraifleet.music.share.function.music.MusicSimpleFunction;
 import net.mamoe.mirai.console.command.CommandManager;
 import net.mamoe.mirai.console.plugin.jvm.JvmPlugin;
 
@@ -18,12 +21,14 @@ public class AmiyaBotLogic extends BaseBotLogic {
 
     AmiyaChatFunction amiyaChatFunction;
     
-    MiraiCodeFunction miraiCodeFunction;
     RepeatFunction repeatFunction;
-    
     WeiboFunction weiboFunction;
     ReminderFunction reminderFunction;
     DriveFunction driveFunction;
+    CharacterHelpFunction characterHelpFunction;
+    
+    MusicCompositeFunction musicCompositeFunction;
+    MusicSimpleFunction musicSimpleFunction;
     
     public AmiyaBotLogic(JvmPlugin plugin) {
         super(plugin, "阿米娅");
@@ -48,11 +53,16 @@ public class AmiyaBotLogic extends BaseBotLogic {
                 );
         functions.add(reminderFunction);
         
-        miraiCodeFunction = new MiraiCodeFunction(this, plugin, characterName);
-        functions.add(miraiCodeFunction);
-        
         driveFunction = new DriveFunction(this, plugin, characterName, true);
         functions.add(driveFunction);
+        
+        characterHelpFunction = new CharacterHelpFunction(this, plugin, characterName);
+        functions.add(characterHelpFunction);
+        
+        musicCompositeFunction = new MusicCompositeFunction(this, plugin, characterName, true);
+        functions.add(musicCompositeFunction);
+        musicSimpleFunction = new MusicSimpleFunction(this, plugin, characterName, true);
+        functions.add(musicSimpleFunction);
         
         allCompositeCommandProxy = new AllCompositeCommandProxy(this, plugin, characterName);
     }

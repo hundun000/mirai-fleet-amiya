@@ -28,6 +28,7 @@ import net.mamoe.mirai.console.plugin.jvm.JvmPlugin;
 import net.mamoe.mirai.contact.Contact;
 import net.mamoe.mirai.contact.Group;
 import net.mamoe.mirai.event.EventHandler;
+import net.mamoe.mirai.event.events.AbstractMessageEvent;
 import net.mamoe.mirai.event.events.GroupMessageEvent;
 import net.mamoe.mirai.event.events.NudgeEvent;
 import net.mamoe.mirai.message.code.MiraiCode;
@@ -178,11 +179,11 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
     
     
     @EventHandler
-    public void onMessage(@NotNull GroupMessageEvent event) throws Exception { 
+    public void onMessage(@NotNull AbstractMessageEvent event) throws Exception { 
         if (!checkCosPermission(event)) {
             return;
         }
-        chat(new FunctionReplyReceiver(event.getGroup(), plugin.getLogger()), event.getMessage().contentToString());
+        chat(new FunctionReplyReceiver(event.getSubject(), plugin.getLogger()), event.getMessage().contentToString());
     }
     
     @EventHandler

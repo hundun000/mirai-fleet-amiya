@@ -86,4 +86,23 @@ public class AllCompositeCommandProxy extends AbstractAllCompositeCommandProxy<A
         botLogic.driveFunction.getCommandComponent().listTargetGroup(sender);
     }
 
+    @SubCommand("help")
+    public void help(CommandSender sender) {
+        botLogic.characterHelpFunction.getCommandComponent().help(sender);
+    }
+    
+    @SubCommand("音乐")
+    public void help(CommandSender sender, String arg, String... args) {
+        botLogic.musicSimpleFunction.getCommandComponent().fromCommand(sender, arg, args);
+    }
+    
+    @SubCommand("QQ音乐")
+    public void searchQQ(CommandSender sender, String arg, String... args) {
+        botLogic.musicCompositeFunction.getCommandComponent().fromCommand(sender, arg, args);
+    }
+    
+    @SubCommand({"网易", "网易云"})
+    public void searchNetEase(CommandSender sender, String arg, String... args) {
+        botLogic.musicCompositeFunction.getCommandComponent().searchNetEase(sender, arg, args);
+    }
 }
