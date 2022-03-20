@@ -12,6 +12,8 @@ import net.mamoe.mirai.console.command.CompositeCommand;
 import net.mamoe.mirai.console.command.descriptor.CommandArgumentContext;
 import net.mamoe.mirai.console.permission.Permission;
 import net.mamoe.mirai.console.plugin.jvm.JvmPlugin;
+import net.mamoe.mirai.contact.Group;
+import net.mamoe.mirai.contact.User;
 
 /**
  * 目前只能用唯一的CompositeCommand注册所有SubCommand，未来改为分别注册。
@@ -71,19 +73,14 @@ public class AllCompositeCommandProxy extends AbstractAllCompositeCommandProxy<A
         botLogic.weiboFunction.getCommandComponent().listTopForUid(sender, name);
     }
 
-    @SubCommand("驾驶")
-    public void chat(CommandSender sender, String messageCode) {
-        botLogic.driveFunction.getCommandComponent().chat(sender, messageCode);
+    @SubCommand("立刻私聊")
+    public void chat(CommandSender sender, User target, String messageCode) {
+        botLogic.driveFunction.getCommandComponent().chat(sender, target, messageCode);
     }
     
-    @SubCommand("设置驾驶状态")
-    public void setTargetGroup(CommandSender sender, Long botId, Long groupId) {
-        botLogic.driveFunction.getCommandComponent().setTargetGroup(sender, botId, groupId);
-    }
-    
-    @SubCommand("查看驾驶状态")
-    public void listTargetGroup(CommandSender sender) {
-        botLogic.driveFunction.getCommandComponent().listTargetGroup(sender);
+    @SubCommand("立刻群聊")
+    public void chat(CommandSender sender, Group target, String messageCode) {
+        botLogic.driveFunction.getCommandComponent().chat(sender, target, messageCode);
     }
 
     @SubCommand("help")

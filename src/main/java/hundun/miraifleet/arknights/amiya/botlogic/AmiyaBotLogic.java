@@ -3,7 +3,6 @@ package hundun.miraifleet.arknights.amiya.botlogic;
 import hundun.miraifleet.arknights.amiya.botlogic.function.AmiyaChatFunction;
 import hundun.miraifleet.framework.core.botlogic.BaseBotLogic;
 import hundun.miraifleet.framework.starter.botlogic.function.CharacterHelpFunction;
-import hundun.miraifleet.framework.starter.botlogic.function.MiraiCodeFunction;
 import hundun.miraifleet.framework.starter.botlogic.function.RepeatFunction;
 import hundun.miraifleet.framework.starter.botlogic.function.drive.DriveFunction;
 import hundun.miraifleet.framework.starter.botlogic.function.reminder.ReminderFunction;
@@ -11,6 +10,7 @@ import hundun.miraifleet.framework.starter.botlogic.function.weibo.WeiboFunction
 import hundun.miraifleet.music.share.function.music.MusicCompositeFunction;
 import hundun.miraifleet.music.share.function.music.MusicSimpleFunction;
 import net.mamoe.mirai.console.command.CommandManager;
+import net.mamoe.mirai.console.plugin.jvm.JavaPlugin;
 import net.mamoe.mirai.console.plugin.jvm.JvmPlugin;
 
 /**
@@ -30,7 +30,7 @@ public class AmiyaBotLogic extends BaseBotLogic {
     MusicCompositeFunction musicCompositeFunction;
     MusicSimpleFunction musicSimpleFunction;
     
-    public AmiyaBotLogic(JvmPlugin plugin) {
+    public AmiyaBotLogic(JavaPlugin plugin) {
         super(plugin, "阿米娅");
         
         amiyaChatFunction = new AmiyaChatFunction(this, plugin, characterName,

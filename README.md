@@ -17,7 +17,9 @@
 
 ## 使用
 
-[作为mirai-console-plugin使用](docs/作为mirai-console-plugin使用.md)
+[作为mirai-console-plugin使用](https://github.com/hundun000/mirai-fleet-framework/blob/0.1/docs/%E4%BD%9C%E4%B8%BAmirai-console-plugin%E4%BD%BF%E7%94%A8.md)
+
+对于本插件，`<特殊权限名>`为`hundun.fleet.amiya.cos:INSTANCE`。
 
 ## 功能详细说明
 
