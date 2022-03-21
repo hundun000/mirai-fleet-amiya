@@ -4,9 +4,12 @@
 
 插件功能：使bot扮演角色阿米娅，作为《明日方舟》游戏助手。
 
-- 推送微博： 明日方舟，朝陇山，泰拉漫画（可修改配置）
-- 事项提醒： 整点报时（可修改配置）
-- 闲聊
+- [微博推送](https://github.com/hundun000/mirai-fleet-framework/blob/0.1/docs/starter-functions/WeiboFunction.md)
+- [报时与提醒](https://github.com/hundun000/mirai-fleet-framework/blob/0.1/docs/starter-functions/ReminderFunction.md)
+- [搜音乐](https://github.com/hundun000/mirai-fleet-music/blob/0.1/docs/share-functions/MusicCompositeFunction.md)（似乎频繁发送音乐分享卡片容易被冻结，用户自行斟酌对该功能的权限授予）
+- [帮助](https://github.com/hundun000/mirai-fleet-framework/blob/0.1/docs/starter-functions/CharacterHelpFunction.md)
+- [阿米娅闲聊](./docs/functions/AmiyaChatFunction.md)
+- [复读、立刻聊天](https://github.com/hundun000/mirai-fleet-framework/blob/0.1/docs/starter-functions/other.md)
 
 依赖服务：mirai框架、微博api
 
@@ -15,13 +18,15 @@
 - 本项目是完全免费且开放源代码的软件，仅供学习和娱乐用途使用
 - 鉴于项目的特殊性，开发团队可能在任何时间**停止更新**或**删除项目**。
 
-## 使用
+## 作为mirai-console-plugin使用
 
-[作为mirai-console-plugin使用](https://github.com/hundun000/mirai-fleet-framework/blob/0.1/docs/%E4%BD%9C%E4%B8%BAmirai-console-plugin%E4%BD%BF%E7%94%A8.md)
+[详细说明](https://github.com/hundun000/mirai-fleet-framework/blob/0.1/docs/%E4%BD%9C%E4%B8%BAmirai-console-plugin%E4%BD%BF%E7%94%A8.md)
 
 对于本插件，`<特殊权限名>`为`hundun.fleet.amiya.cos:INSTANCE`。
 
 ## 功能详细说明
 
-[功能详细说明](docs/功能详细说明.md)
+[详细说明](https://github.com/hundun000/mirai-fleet-framework/blob/0.1/docs/%E5%8A%9F%E8%83%BD%E8%AF%A6%E7%BB%86%E8%AF%B4%E6%98%8E.md)
+
+对于本插件，`<角色名>`为`阿米娅`。
 
