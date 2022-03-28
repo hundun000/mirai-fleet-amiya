@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -59,7 +60,7 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
     List<ExternalResource> selfNudgeFaces = new ArrayList<>();
     Map<Long, ExternalResource> otherNudgeFaces = new HashMap<>();
     
-    Map<String, List<String>> listenConfigData = new HashMap<>();
+    Map<String, List<String>> listenConfigData = new LinkedHashMap<>();
     
     public AmiyaChatFunction(
             BaseBotLogic botLogic,
@@ -264,14 +265,19 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
                         new PlainText(NOT_SUPPORT_RESOURCE_PLACEHOLDER)
                         );
             }
-        } else if (listenConfigData.containsKey(message)){
-            List<String> candidates = listenConfigData.get(message);
-            int index = (int) (Math.random() * candidates.size());
-            String reply = candidates.get(index);
-            log.info("use listenConfig candidates index = " + index);
-            subject.sendMessage(
-                    reply
-                    );
+        } else {
+            for (String pattern : listenConfigData.keySet()) {
+                if (message.contains(pattern)) {
+                    List<String> candidates = listenConfigData.get(pattern);
+                    int index = (int) (Math.random() * candidates.size());
+                    String reply = candidates.get(index);
+                    log.info("use listenConfig candidates index = " + index);
+                    subject.sendMessage(
+                            reply
+                            );
+                    break;
+                }
+            }
         }
     }
 
