@@ -15,8 +15,8 @@ buildscript {
 }
 
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.4.32' 
-    id 'org.jetbrains.kotlin.plugin.serialization' version '1.4.32'
+    id 'org.jetbrains.kotlin.jvm' version '1.6.10' 
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.6.10'
     id 'net.mamoe.mirai-console' version "${MIRAI_VERSION}"
 }
 
@@ -31,9 +31,13 @@ apply plugin: 'java-library'
 //    }
 //}
 
-group = 'AmiyaPlugin'
-version = '0.3.1-SNAPSHOT'
-sourceCompatibility = '11'
+group = 'usless.group.Name'
+// version used in mirai: buildPlugin
+version = '0.4.0-SNAPSHOT'
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
 
 repositories {
     //removeIf { it is MavenArtifactRepository && it.url.host == "dl.bintray.com" }
@@ -60,17 +64,18 @@ test {
 
 dependencies {
 
-    implementation 'io.github.openfeign:feign-jackson:11.1'
-    implementation 'io.github.openfeign:feign-core:11.1'
+    //implementation 'io.github.openfeign:feign-jackson:11.1'
+    //implementation 'io.github.openfeign:feign-core:11.1'
     
-    implementation 'com.github.hundun000:mirai-fleet-framework:0.3'
-    implementation 'com.github.hundun000:mirai-fleet-music:0.3.1'
+    implementation 'com.github.hundun000.mirai-fleet-framework:mirai-fleet-framework-core:0.5.0'
+    implementation 'com.github.hundun000.mirai-fleet-framework:mirai-fleet-framework-starter:0.5.0'
+    //implementation 'com.github.hundun000:mirai-fleet-music:0.3.1'
 
     
     compileOnly 'org.projectlombok:lombok:1.18.4'
     annotationProcessor 'org.projectlombok:lombok:1.18.4'
     
-    testCompile "junit:junit:4.11"
+    testImplementation "junit:junit:4.11"
 }
 
 
