@@ -73,7 +73,6 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
                 plugin, 
                 characterName, 
                 "AmiyaChatFunction", 
-                true,
                 null
                 );
         initExternalResource();

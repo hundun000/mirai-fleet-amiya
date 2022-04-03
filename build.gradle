@@ -32,7 +32,7 @@ apply plugin: 'java-library'
 //}
 
 group = 'AmiyaPlugin'
-version = '0.0.1-SNAPSHOT'
+version = '0.3.1-SNAPSHOT'
 sourceCompatibility = '11'
 
 repositories {
@@ -63,8 +63,8 @@ dependencies {
     implementation 'io.github.openfeign:feign-jackson:11.1'
     implementation 'io.github.openfeign:feign-core:11.1'
     
-    implementation 'com.github.hundun000:mirai-fleet-framework:0.2'
-    implementation 'com.github.hundun000:mirai-fleet-music:0.1'
+    implementation 'com.github.hundun000:mirai-fleet-framework:0.3'
+    implementation 'com.github.hundun000:mirai-fleet-music:0.3.1'
 
     
     compileOnly 'org.projectlombok:lombok:1.18.4'

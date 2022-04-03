@@ -41,27 +41,25 @@ public class AmiyaBotLogic extends BaseBotLogic {
         repeatFunction = new RepeatFunction(this, plugin, characterName);
         functions.add(repeatFunction);
         
-        weiboFunction = new WeiboFunction(this, plugin, characterName,
-                true,                
+        weiboFunction = new WeiboFunction(this, plugin, characterName,          
                 AmiyaDefaultConfigAndData.weiboConfigDefaultDataSupplier());
         functions.add(weiboFunction);
         
         reminderFunction = new ReminderFunction(this, plugin, characterName, 
-                true,  
                 AmiyaDefaultConfigAndData.reminderListDefaultDataSupplier(),
                 AmiyaDefaultConfigAndData.hourlyChatConfigDefaultDataSupplier()
                 );
         functions.add(reminderFunction);
         
-        driveFunction = new DriveFunction(this, plugin, characterName, true);
+        driveFunction = new DriveFunction(this, plugin, characterName);
         functions.add(driveFunction);
         
         characterHelpFunction = new CharacterHelpFunction(this, plugin, characterName);
         functions.add(characterHelpFunction);
         
-        musicCompositeFunction = new MusicCompositeFunction(this, plugin, characterName, true);
+        musicCompositeFunction = new MusicCompositeFunction(this, plugin, characterName);
         functions.add(musicCompositeFunction);
-        musicSimpleFunction = new MusicSimpleFunction(this, plugin, characterName, true);
+        musicSimpleFunction = new MusicSimpleFunction(this, plugin, characterName);
         functions.add(musicSimpleFunction);
         
         allCompositeCommandProxy = new AllCompositeCommandProxy(this, plugin, characterName);
