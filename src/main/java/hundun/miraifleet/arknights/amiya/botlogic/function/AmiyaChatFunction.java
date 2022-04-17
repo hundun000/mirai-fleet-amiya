@@ -1,6 +1,8 @@
 package hundun.miraifleet.arknights.amiya.botlogic.function;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,17 +11,22 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import org.jetbrains.annotations.NotNull;
 
+import hundun.miraifleet.arknights.amiya.botlogic.function.ListenConfig.NudgeReply;
 import hundun.miraifleet.framework.core.botlogic.BaseBotLogic;
 import hundun.miraifleet.framework.core.function.AsListenerHost;
 import hundun.miraifleet.framework.core.function.BaseFunction;
 import hundun.miraifleet.framework.core.function.FunctionReplyReceiver;
+import hundun.miraifleet.framework.core.helper.file.CacheableFileHelper;
 import hundun.miraifleet.framework.core.helper.repository.SingletonDocumentRepository;
 import hundun.miraifleet.framework.starter.botlogic.function.RepeatFunction.SessionData;
 import hundun.miraifleet.framework.starter.botlogic.function.reminder.config.HourlyChatConfig;
+import hundun.miraifleet.image.share.function.PatPatCoreKt;
+import hundun.miraifleet.image.share.function.UtilsKt;
 import net.mamoe.mirai.console.command.AbstractCommand;
 import net.mamoe.mirai.console.command.BuiltInCommands;
 import net.mamoe.mirai.console.command.CommandManager;
@@ -36,6 +43,7 @@ import net.mamoe.mirai.message.code.MiraiCode;
 import net.mamoe.mirai.message.data.At;
 import net.mamoe.mirai.message.data.Audio;
 import net.mamoe.mirai.message.data.Image;
+import net.mamoe.mirai.message.data.Message;
 import net.mamoe.mirai.message.data.MessageChain;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.PlainText;
@@ -48,19 +56,31 @@ import net.mamoe.mirai.utils.ExternalResource;
  */
 @AsListenerHost
 public class AmiyaChatFunction extends BaseFunction<Void> {
-
+    
+    SingletonDocumentRepository<ListenConfig> listenConfigRepository;
     Random rand = new Random();
+    private final PatPatCoreKt patPatCoreKt = PatPatCoreKt.INSTANCE;
+    private static final int PATPAT_HANDS_SIZE = 5;
+    private final File[] patpatHandFiles = new File[PATPAT_HANDS_SIZE];
+    private final CacheableFileHelper cacheableFileHelper;
+    
+    // ------ 下班 ------
     private String cannotRelaxTalk = "博士，您还有许多事情需要处理。现在还不能休息哦。";
     private String canRelaxTalk = "博士，辛苦了！累了的话请休息一会儿吧。";
     ExternalResource cannotRelaxExternalResource;
     ExternalResource canRelaxExternalResource;
-    ExternalResource damedaneVoiceExternalResource;
     int forceTodayIsHoliday = -1;
     int forceTodayIsWorkday = -1;
+    // ------ damedane ------
+    ExternalResource damedaneVoiceExternalResource;
+    // ------ nudge ------
     List<ExternalResource> selfNudgeFaces = new ArrayList<>();
     Map<Long, ExternalResource> otherNudgeFaces = new HashMap<>();
-    
+    // ------ 海猫all ------
+    private ExternalResource oceanCatAll;
+    // ------ listen ------
     Map<String, List<String>> listenConfigData = new LinkedHashMap<>();
+    
     
     public AmiyaChatFunction(
             BaseBotLogic botLogic,
@@ -75,8 +95,8 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
                 "AmiyaChatFunction", 
                 null
                 );
-        initExternalResource();
-        SingletonDocumentRepository<ListenConfig> listenConfigRepository = new SingletonDocumentRepository<>(
+        this.cacheableFileHelper = new CacheableFileHelper(resolveFunctionCacheFileFolder());
+        this.listenConfigRepository = new SingletonDocumentRepository<>(
                 plugin, 
                 resolveFunctionConfigFile("ListenConfig.json"), 
                 ListenConfig.class,
@@ -90,9 +110,8 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
                     listenConfigData.put(key, entry.getValue());
                 }
             });
-            
         }
-        
+        initExternalResource();
     }
     
     List<String> validEnds = Arrays.asList("gif", "png", "bmp", "jpg");
@@ -141,6 +160,11 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
                     
                 }
             }
+            
+            for (int i = 0; i < PATPAT_HANDS_SIZE; i++) {
+                patpatHandFiles[i] = (resolveFunctionDataFile("patpat/img" + i + ".png"));
+            }
+            oceanCatAll = ExternalResource.create(resolveFunctionDataFile("patpat/all.png"));
         } catch (Exception e) {
             log.error("open cannotRelaxImage error: " + e.getMessage());
         }
@@ -191,6 +215,25 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
         if (!checkCosPermission(event)) {
             return;
         }
+        ListenConfig listenConfig = listenConfigRepository.findSingleton();
+        if (listenConfig != null) {
+            if (listenConfig.getNudgeReply() == NudgeReply.RANDOM_FACE) {
+                nudgeReplyByRandomFace(event);
+            } else if (listenConfig.getNudgeReply() == NudgeReply.PATPAT) {
+                nudgeReplyByPatPat(event);
+            }
+        }
+    }
+    
+    private void nudgeReplyByPatPat(NudgeEvent event) {
+        var targetAvatarImage = UtilsKt.getContactOrBotAvatarImage(event.getFrom());
+        if (targetAvatarImage != null) {
+            FunctionReplyReceiver receiver = new FunctionReplyReceiver(event.getSubject(), log);
+            patpat(receiver, targetAvatarImage, null);
+        }
+    }
+    
+    private void nudgeReplyByRandomFace(NudgeEvent event) {
         long senderId = event.getFrom().getId();
         long targetId = event.getTarget().getId();
         Contact contact = event.getSubject();
@@ -264,6 +307,9 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
                         new PlainText(NOT_SUPPORT_RESOURCE_PLACEHOLDER)
                         );
             }
+        } else if (message.contains("海猫") && (message.contains("all") || message.contains("All") || message.contains("ALL"))) {
+            var targetAvatarImage = UtilsKt.externalResourceToSkioImage(oceanCatAll);
+            patpat(subject, targetAvatarImage, "oceanCatAll");
         } else {
             for (String pattern : listenConfigData.keySet()) {
                 if (message.contains(pattern)) {
@@ -277,7 +323,7 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
                     break;
                 }
             }
-        }
+        } 
     }
 
 
@@ -286,5 +332,29 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
         return null;
     }
     
+    private void patpat(FunctionReplyReceiver receiver, org.jetbrains.skia.Image targetAvatarImage, String cacheId) {
+
+        ExternalResource externalResource = null;
+        if (cacheId != null) {
+            Function<String, InputStream> uncachedPatPatFileProvider = it -> calculatePatPatImage(targetAvatarImage);
+            File patpatResultFile = cacheableFileHelper.fromCacheOrProvider(cacheId, uncachedPatPatFileProvider);
+            externalResource = ExternalResource.create(patpatResultFile).toAutoCloseable();
+        } else {
+            try (InputStream inputStream = calculatePatPatImage(targetAvatarImage)) {
+                externalResource = ExternalResource.create(inputStream).toAutoCloseable();
+            } catch (Exception e) {
+                log.error("patpat externalResource error: " + e.getMessage());
+            }
+        }
+        
+        Message message = receiver.uploadImageOrNotSupportPlaceholder(externalResource);
+        receiver.sendMessage(message);
+
+    }
+
+    private InputStream calculatePatPatImage(org.jetbrains.skia.Image targetAvatarImage) {
+        var patpatResult = patPatCoreKt.patpat(targetAvatarImage, patpatHandFiles, 0.05);
+        return new ByteArrayInputStream(patpatResult.getBytes());
+    }
 
 }
