@@ -166,7 +166,7 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
             }
             oceanCatAll = ExternalResource.create(resolveFunctionDataFile("patpat/all.png"));
         } catch (Exception e) {
-            log.error("open cannotRelaxImage error: " + e.getMessage());
+            log.error("initExternalResource error: " + e.getMessage());
         }
     }
     
