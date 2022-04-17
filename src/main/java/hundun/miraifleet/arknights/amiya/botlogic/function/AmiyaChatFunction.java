@@ -217,11 +217,31 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
         }
         ListenConfig listenConfig = listenConfigRepository.findSingleton();
         if (listenConfig != null) {
-            if (listenConfig.getNudgeReply() == NudgeReply.RANDOM_FACE) {
-                nudgeReplyByRandomFace(event);
-            } else if (listenConfig.getNudgeReply() == NudgeReply.PATPAT) {
-                nudgeReplyByPatPat(event);
+            long senderId = event.getFrom().getId();
+            long targetId = event.getTarget().getId();
+            
+            FunctionReplyReceiver receiver = new FunctionReplyReceiver(event.getSubject(), log);
+            Message message = null;
+            if (event.getBot().getId() == targetId) {
+                if (listenConfig.getNudgeReply() == NudgeReply.RANDOM_FACE) {
+                    int index = rand.nextInt(selfNudgeFaces.size());
+                    log.info("use selfNudgeFaces index = " + index);
+                    message = receiver.uploadImageOrNotSupportPlaceholder(selfNudgeFaces.get(index));
+                } else if (listenConfig.getNudgeReply() == NudgeReply.PATPAT) {
+                    nudgeReplyByPatPat(event);
+                }
+            } else if (otherNudgeFaces.containsKey(targetId)) {
+                ExternalResource specialNudgeFace = otherNudgeFaces.get(targetId);
+                message = receiver.uploadImageOrNotSupportPlaceholder(specialNudgeFace);
+            } else {
+                // nudge-target is normal member, do nothing
+                return;
             }
+            
+            receiver.sendMessage( 
+                        new At(senderId)
+                        .plus(message)
+                        );
         }
     }
     
@@ -230,36 +250,6 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
         if (targetAvatarImage != null) {
             FunctionReplyReceiver receiver = new FunctionReplyReceiver(event.getSubject(), log);
             patpat(receiver, targetAvatarImage, null);
-        }
-    }
-    
-    private void nudgeReplyByRandomFace(NudgeEvent event) {
-        long senderId = event.getFrom().getId();
-        long targetId = event.getTarget().getId();
-        Contact contact = event.getSubject();
-        Image image = null;
-        if (event.getBot().getId() == targetId) {
-            int index = rand.nextInt(selfNudgeFaces.size());
-            log.info("use selfNudgeFaces index = " + index);
-            image = contact.uploadImage(selfNudgeFaces.get(index));
-        } else if (otherNudgeFaces.containsKey(targetId)) {
-            ExternalResource specialNudgeFace = otherNudgeFaces.get(targetId);
-            image = contact.uploadImage(specialNudgeFace);
-        } else {
-            // nudge-target is normal member, do nothing
-            return;
-        }
-        
-        if (image != null) {
-            contact.sendMessage( 
-                    new At(senderId)
-                    .plus(image)
-                    );
-        } else {
-            contact.sendMessage( 
-                    new At(senderId)
-                    .plus(NOT_SUPPORT_RESOURCE_PLACEHOLDER)
-                    );
         }
     }
 
