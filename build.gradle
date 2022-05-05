@@ -33,7 +33,7 @@ apply plugin: 'java-library'
 
 group = 'usless.group.Name'
 // version used in mirai: buildPlugin
-version = '0.4.0-SNAPSHOT'
+version = '0.5.0-SNAPSHOT'
 java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
@@ -72,8 +72,8 @@ dependencies {
     implementation 'com.github.hundun000.mirai-fleet-framework:framework-core:0.5.1'
     implementation 'com.github.hundun000.mirai-fleet-framework:framework-starter:0.5.1'
     //implementation 'com.github.hundun000:mirai-fleet-music:0.3.1'
-    implementation 'com.github.hundun000:mirai-fleet-image:5ee5d05e9e'
-    compileOnly("com.github.LaoLittle:SkikoMirai:1.0.6")
+    implementation 'com.github.hundun000:mirai-fleet-image:6fa00ebe02'
+    compileOnly("com.github.LaoLittle:SkikoMirai:1.0.8")
     
     compileOnly 'org.projectlombok:lombok:1.18.4'
     annotationProcessor 'org.projectlombok:lombok:1.18.4'

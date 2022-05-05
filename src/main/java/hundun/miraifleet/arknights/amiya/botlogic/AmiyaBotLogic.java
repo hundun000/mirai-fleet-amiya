@@ -33,7 +33,8 @@ public class AmiyaBotLogic extends BaseJavaBotLogic {
         super(plugin, "阿米娅");
         
         amiyaChatFunction = new AmiyaChatFunction(this, plugin, characterName,
-                AmiyaDefaultConfigAndData.listenConfigDefaultDataSupplier()
+                AmiyaDefaultConfigAndData.listenConfigDefaultDataSupplier(),
+                AmiyaDefaultConfigAndData.nudgeConfigDefaultDataSupplier()
                 );
         functions.add(amiyaChatFunction);
         

@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import hundun.miraifleet.arknights.amiya.botlogic.function.ListenConfig;
+import hundun.miraifleet.arknights.amiya.botlogic.function.NudgeConfig;
+import hundun.miraifleet.arknights.amiya.botlogic.function.NudgeConfig.NudgeReply;
 import hundun.miraifleet.framework.core.helper.repository.SingletonDocumentRepository;
 import hundun.miraifleet.framework.starter.botlogic.function.reminder.config.HourlyChatConfig;
 import hundun.miraifleet.framework.starter.botlogic.function.reminder.domain.ReminderItem;
@@ -79,6 +81,14 @@ public class AmiyaDefaultConfigAndData {
                                     ) 
                     )
             );
+            return toSingletonMap(listenConfig);
+        };
+    }
+    
+    public static Supplier<Map<String, NudgeConfig>> nudgeConfigDefaultDataSupplier() {
+        return () -> {
+            NudgeConfig listenConfig = new NudgeConfig();
+            listenConfig.setNudgeReply(NudgeReply.PATPAT);
             return toSingletonMap(listenConfig);
         };
     }

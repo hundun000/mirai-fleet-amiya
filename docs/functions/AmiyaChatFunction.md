@@ -4,19 +4,56 @@
 
 当群消息包含“下班”时触发。根据是否是工作时间（周一至周五9点至17点），bot会做不同回复。
 
-#### 【群消息事件】damedane
+#### 【群消息事件】方舟梗
 
-当群员发言里包含“damedane”，<角色名>会播放音频。
+(1) damedane
+
+当群员发言里包含“damedane”，bot会发送damedane音频。
+
+(2) 海猫all
+
+当群员发言里包含“海猫”和“all”时，bot会发送海猫摸转盘gif。
 
 #### 【群消息事件】戳一戳
 
-戳一戳<角色名>，<角色名>会发送随机的<角色名>表情图片。戳一戳任一群员，若存在响应配置，<角色名>会发送配置指定的图片。
+(1) 若bot被戳
+
+##### 选择自身被戳时的回应方式
 
 配置方法：
 
-戳<角色名>时，发送的图片为`data\hundun.fleet.amiya\AmiyaChatFunction\selfNudgeFaces`里的随机图片。
+手动编辑（重启后生效）`config\hundun.fleet.amiya\AmiyaChatFunction\NudgeConfig.json`
 
-戳qq号：123456的群员时，若在`data\hundun.fleet.amiya\AmiyaChatFunction\otherNudgeFaces`里有名为`123456.png`的图片，则发送该图片。否则无事发生。
+配置格式：
+
+|值|含义|
+|---|---|
+|RANDOM_FACE|以随机表情图片回应|
+|PATPAT|以摸头图片回应|
+
+配置样例（亦是配置文件自动创建时的默认值）：
+
+```json
+{ 
+    "SINGLETON": {
+        "nudgeReply": "PATPAT"
+    }
+}
+```
+
+##### 以随机表情图片回应
+
+戳bot时，发送的图片为`data\hundun.fleet.amiya\AmiyaChatFunction\selfNudgeFaces`里的随机图片。
+
+##### 以摸头图片回应
+
+戳bot时，以摸头gif为模板，填充戳一戳发起者的qq头像，发送生成的图片。
+
+(2) 若bot以外的群员被戳
+
+戳一戳任一群员，若存在响应配置，bot会发送配置指定的图片。
+
+戳qq号=123456的群员时，若在`data\hundun.fleet.amiya\AmiyaChatFunction\otherNudgeFaces`里有名为`123456.png`的图片，则发送该图片。否则无事发生。
 
 #### 【群消息事件】自定义回复
 

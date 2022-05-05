@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 
 import org.jetbrains.annotations.NotNull;
 
-import hundun.miraifleet.arknights.amiya.botlogic.function.ListenConfig.NudgeReply;
+import hundun.miraifleet.arknights.amiya.botlogic.function.NudgeConfig.NudgeReply;
 import hundun.miraifleet.framework.core.botlogic.BaseBotLogic;
 import hundun.miraifleet.framework.core.function.AsListenerHost;
 import hundun.miraifleet.framework.core.function.BaseFunction;
@@ -58,6 +58,7 @@ import net.mamoe.mirai.utils.ExternalResource;
 public class AmiyaChatFunction extends BaseFunction<Void> {
     
     SingletonDocumentRepository<ListenConfig> listenConfigRepository;
+    SingletonDocumentRepository<NudgeConfig> nudgeConfigRepository;
     Random rand = new Random();
     private final PatPatCoreKt patPatCoreKt = PatPatCoreKt.INSTANCE;
     private static final int PATPAT_HANDS_SIZE = 5;
@@ -86,7 +87,8 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
             BaseBotLogic botLogic,
             JvmPlugin plugin, 
             String characterName, 
-            Supplier<Map<String, ListenConfig>> supplier
+            Supplier<Map<String, ListenConfig>> supplier,
+            Supplier<Map<String, NudgeConfig>> supplierNudgeConfig
             ) {
         super(
                 botLogic,
@@ -101,6 +103,12 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
                 resolveFunctionConfigFile("ListenConfig.json"), 
                 ListenConfig.class,
                 supplier
+                );
+        this.nudgeConfigRepository = new SingletonDocumentRepository<>(
+                plugin, 
+                resolveFunctionConfigFile("NudgeConfig.json"), 
+                NudgeConfig.class,
+                supplierNudgeConfig
                 );
         ListenConfig listenConfig = listenConfigRepository.findSingleton();
         if (listenConfig != null && listenConfig.getListens() != null) {
@@ -216,19 +224,22 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
             return;
         }
         ListenConfig listenConfig = listenConfigRepository.findSingleton();
-        if (listenConfig != null) {
+        NudgeConfig nudgeConfig = nudgeConfigRepository.findSingleton();
+        if (listenConfig != null && nudgeConfig != null) {
             long senderId = event.getFrom().getId();
             long targetId = event.getTarget().getId();
             
             FunctionReplyReceiver receiver = new FunctionReplyReceiver(event.getSubject(), log);
-            Message message = null;
+            Message message;
             if (event.getBot().getId() == targetId) {
-                if (listenConfig.getNudgeReply() == NudgeReply.RANDOM_FACE) {
+                if (nudgeConfig.getNudgeReply() == NudgeReply.RANDOM_FACE) {
                     int index = rand.nextInt(selfNudgeFaces.size());
                     log.info("use selfNudgeFaces index = " + index);
                     message = receiver.uploadImageOrNotSupportPlaceholder(selfNudgeFaces.get(index));
-                } else if (listenConfig.getNudgeReply() == NudgeReply.PATPAT) {
-                    nudgeReplyByPatPat(event);
+                } else if (nudgeConfig.getNudgeReply() == NudgeReply.PATPAT) {
+                    message = nudgeReplyByPatPat(event);
+                } else {
+                    message = new PlainText("未知的回应方式：" + nudgeConfig.getNudgeReply());
                 }
             } else if (otherNudgeFaces.containsKey(targetId)) {
                 ExternalResource specialNudgeFace = otherNudgeFaces.get(targetId);
@@ -242,15 +253,18 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
                         new At(senderId)
                         .plus(message)
                         );
+        } else {
+            log.warning("配置缺失");
         }
     }
     
-    private void nudgeReplyByPatPat(NudgeEvent event) {
+    private Message nudgeReplyByPatPat(NudgeEvent event) {
         var targetAvatarImage = UtilsKt.getContactOrBotAvatarImage(event.getFrom());
         if (targetAvatarImage != null) {
             FunctionReplyReceiver receiver = new FunctionReplyReceiver(event.getSubject(), log);
-            patpat(receiver, targetAvatarImage, null);
+            return patpat(receiver, targetAvatarImage, null);
         }
+        return new PlainText("获取对象用户头像失败");
     }
 
 
@@ -322,7 +336,7 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
         return null;
     }
     
-    private void patpat(FunctionReplyReceiver receiver, org.jetbrains.skia.Image targetAvatarImage, String cacheId) {
+    private Message patpat(FunctionReplyReceiver receiver, org.jetbrains.skia.Image targetAvatarImage, String cacheId) {
 
         ExternalResource externalResource = null;
         if (cacheId != null) {
@@ -338,7 +352,7 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
         }
         
         Message message = receiver.uploadImageOrNotSupportPlaceholder(externalResource);
-        receiver.sendMessage(message);
+        return message;
 
     }
 
