@@ -33,7 +33,7 @@ apply plugin: 'java-library'
 
 group = 'usless.group.Name'
 // version used in mirai: buildPlugin
-version = '0.5.0-SNAPSHOT'
+version = '-SNAPSHOT'
 java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11

@@ -1,14 +1,21 @@
 ## v0.5.0
 
-新特性：
+开发者测试时使用的mirai-console版本：2.11-RC（建议用户不要落后太多版本）
 
+### 注意事项
 
-优化：
+新增依赖前置插件：SkikoMirai，用户需要做的工作详见首页README说明。
 
+### 新特性：
+- 新功能：阿米娅闲聊子功能：海猫all，以摸头图片回应戳一戳
 
-ConfigAndData变化：  
+### 优化：
+- 用户文档调整
+- framework内部实现优化
 
-新增patpat有关的data
+### ConfigAndData变化：  
+
+新增patpat所需要的data
 
 ## v0.2.3
 
