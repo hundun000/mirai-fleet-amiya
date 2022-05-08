@@ -71,7 +71,7 @@ dependencies {
     
     implementation 'com.github.hundun000.mirai-fleet-framework:framework-core:0.5.1'
     implementation 'com.github.hundun000.mirai-fleet-framework:framework-starter:0.5.1'
-    //implementation 'com.github.hundun000:mirai-fleet-music:0.3.1'
+    implementation 'com.github.hundun000:mirai-fleet-music:0.5.0'
     implementation 'com.github.hundun000:mirai-fleet-image:6fa00ebe02'
     compileOnly("com.github.LaoLittle:SkikoMirai:1.0.8")
     

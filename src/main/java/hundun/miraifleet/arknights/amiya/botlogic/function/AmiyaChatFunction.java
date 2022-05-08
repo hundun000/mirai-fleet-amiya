@@ -313,7 +313,10 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
             }
         } else if (message.contains("海猫") && (message.contains("all") || message.contains("All") || message.contains("ALL"))) {
             var targetAvatarImage = UtilsKt.externalResourceToSkioImage(oceanCatAll);
-            patpat(subject, targetAvatarImage, "oceanCatAll");
+            var outputMessage = patpat(subject, targetAvatarImage, "oceanCatAll");
+            subject.sendMessage(
+                    outputMessage
+                    );
         } else {
             for (String pattern : listenConfigData.keySet()) {
                 if (message.contains(pattern)) {
