@@ -1,6 +1,7 @@
 package hundun.miraifleet.arknights.amiya.botlogic;
 
-import hundun.miraifleet.arknights.amiya.botlogic.function.AmiyaChatFunction;
+import hundun.miraifleet.arknights.amiya.botlogic.function.chat.AmiyaChatFunction;
+import hundun.miraifleet.arknights.amiya.botlogic.function.image.AmiyaImageFunction;
 import hundun.miraifleet.framework.core.botlogic.BaseBotLogic;
 import hundun.miraifleet.framework.core.botlogic.BaseJavaBotLogic;
 import hundun.miraifleet.framework.starter.botlogic.function.CharacterHelpFunction;
@@ -21,6 +22,7 @@ import net.mamoe.mirai.console.plugin.jvm.JvmPlugin;
 public class AmiyaBotLogic extends BaseJavaBotLogic {
 
     AmiyaChatFunction amiyaChatFunction;
+    AmiyaImageFunction amiyaImageFunction;
     
     RepeatFunction repeatFunction;
     WeiboFunction weiboFunction;
@@ -39,6 +41,9 @@ public class AmiyaBotLogic extends BaseJavaBotLogic {
                 AmiyaDefaultConfigAndData.nudgeConfigDefaultDataSupplier()
                 );
         functions.add(amiyaChatFunction);
+        
+        amiyaImageFunction = new AmiyaImageFunction(this, plugin, characterName);
+        functions.add(amiyaImageFunction);
         
         repeatFunction = new RepeatFunction(this, plugin, characterName);
         functions.add(repeatFunction);

@@ -1,4 +1,4 @@
-package hundun.miraifleet.arknights.amiya.botlogic.function;
+package hundun.miraifleet.arknights.amiya.botlogic.function.chat;
 
 import java.util.List;
 import java.util.Map;

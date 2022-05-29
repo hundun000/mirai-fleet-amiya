@@ -1,4 +1,4 @@
-package hundun.miraifleet.arknights.amiya.botlogic.function;
+package hundun.miraifleet.arknights.amiya.botlogic.function.chat;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -16,7 +16,7 @@ import java.util.function.Supplier;
 
 import org.jetbrains.annotations.NotNull;
 
-import hundun.miraifleet.arknights.amiya.botlogic.function.NudgeConfig.NudgeReply;
+import hundun.miraifleet.arknights.amiya.botlogic.function.chat.NudgeConfig.NudgeReply;
 import hundun.miraifleet.framework.core.botlogic.BaseBotLogic;
 import hundun.miraifleet.framework.core.function.AsListenerHost;
 import hundun.miraifleet.framework.core.function.BaseFunction;
@@ -60,7 +60,7 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
     SingletonDocumentRepository<ListenConfig> listenConfigRepository;
     SingletonDocumentRepository<NudgeConfig> nudgeConfigRepository;
     Random rand = new Random();
-    private final PatPatCoreKt patPatCoreKt = PatPatCoreKt.INSTANCE;
+    private PatPatCoreKt patPatCoreKt;
     private static final int PATPAT_HANDS_SIZE = 5;
     private final File[] patpatHandFiles = new File[PATPAT_HANDS_SIZE];
     private final CacheableFileHelper cacheableFileHelper;
@@ -97,7 +97,7 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
                 "AmiyaChatFunction", 
                 null
                 );
-        this.cacheableFileHelper = new CacheableFileHelper(resolveFunctionCacheFileFolder());
+        this.cacheableFileHelper = new CacheableFileHelper(resolveFunctionCacheFileFolder(), plugin.getLogger());
         this.listenConfigRepository = new SingletonDocumentRepository<>(
                 plugin, 
                 resolveFunctionConfigFile("ListenConfig.json"), 
@@ -118,6 +118,12 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
                     listenConfigData.put(key, entry.getValue());
                 }
             });
+        }
+        try {
+            patPatCoreKt = PatPatCoreKt.INSTANCE;
+        } catch (Error e) {
+            patPatCoreKt = null;
+            log.error("cannot init patPatCoreKt:" + e.getMessage());
         }
         initExternalResource();
     }

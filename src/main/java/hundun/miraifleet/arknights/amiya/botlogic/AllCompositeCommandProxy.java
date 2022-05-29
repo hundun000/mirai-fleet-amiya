@@ -102,4 +102,9 @@ public class AllCompositeCommandProxy extends AbstractAllCompositeCommandProxy<A
     public void searchNetEase(CommandSender sender, String arg, String... args) {
         botLogic.musicCompositeFunction.getCommandComponent().searchNetEase(sender, arg, args);
     }
+    
+    @SubCommand("玩")
+    public void playPhoneTest(CommandSender sender, User target) {
+        botLogic.amiyaImageFunction.getCommandComponent().playPhone(sender, target);
+    }
 }

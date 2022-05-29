@@ -2,6 +2,7 @@
 /bots/
 /plugins/
 /data/
+/logs/
 
 HELP.md
 .gradle

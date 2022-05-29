@@ -1,0 +1,11 @@
+{
+  "type": "GIF",
+  "avatar": "SINGLE",
+  "pos": [
+    [195,390,90,90], [200,390,90,90], [200,395,90,90], [200,395,90,90]
+  ],
+  "text": "",
+  "round": false,
+  "rotate": false,
+  "avatarOnTop": false
+}

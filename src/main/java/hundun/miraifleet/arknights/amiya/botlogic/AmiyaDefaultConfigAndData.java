@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import hundun.miraifleet.arknights.amiya.botlogic.function.ListenConfig;
-import hundun.miraifleet.arknights.amiya.botlogic.function.NudgeConfig;
-import hundun.miraifleet.arknights.amiya.botlogic.function.NudgeConfig.NudgeReply;
+import hundun.miraifleet.arknights.amiya.botlogic.function.chat.ListenConfig;
+import hundun.miraifleet.arknights.amiya.botlogic.function.chat.NudgeConfig;
+import hundun.miraifleet.arknights.amiya.botlogic.function.chat.NudgeConfig.NudgeReply;
 import hundun.miraifleet.framework.core.helper.repository.SingletonDocumentRepository;
 import hundun.miraifleet.framework.starter.botlogic.function.reminder.config.HourlyChatConfig;
 import hundun.miraifleet.framework.starter.botlogic.function.reminder.domain.ReminderItem;
