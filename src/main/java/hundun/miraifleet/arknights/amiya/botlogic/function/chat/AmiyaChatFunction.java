@@ -1,7 +1,9 @@
 package hundun.miraifleet.arknights.amiya.botlogic.function.chat;
 
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,9 +16,12 @@ import java.util.Random;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import javax.imageio.ImageIO;
+
 import org.jetbrains.annotations.NotNull;
 
 import hundun.miraifleet.arknights.amiya.botlogic.function.chat.NudgeConfig.NudgeReply;
+import hundun.miraifleet.arknights.amiya.botlogic.function.share.SharedPetFunction;
 import hundun.miraifleet.framework.core.botlogic.BaseBotLogic;
 import hundun.miraifleet.framework.core.function.AsListenerHost;
 import hundun.miraifleet.framework.core.function.BaseFunction;
@@ -60,9 +65,9 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
     SingletonDocumentRepository<ListenConfig> listenConfigRepository;
     SingletonDocumentRepository<NudgeConfig> nudgeConfigRepository;
     Random rand = new Random();
-    private PatPatCoreKt patPatCoreKt;
-    private static final int PATPAT_HANDS_SIZE = 5;
-    private final File[] patpatHandFiles = new File[PATPAT_HANDS_SIZE];
+//    private PatPatCoreKt patPatCoreKt;
+//    private static final int PATPAT_HANDS_SIZE = 5;
+//    private final File[] patpatHandFiles = new File[PATPAT_HANDS_SIZE];
     private final CacheableFileHelper cacheableFileHelper;
     
     // ------ 下班 ------
@@ -78,10 +83,14 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
     List<ExternalResource> selfNudgeFaces = new ArrayList<>();
     Map<Long, ExternalResource> otherNudgeFaces = new HashMap<>();
     // ------ 海猫all ------
-    private ExternalResource oceanCatAll;
+    private BufferedImage oceanCatAll;
     // ------ listen ------
     Map<String, List<String>> listenConfigData = new LinkedHashMap<>();
     
+    private SharedPetFunction petFunction;
+    public void lazyInitSharedFunction(SharedPetFunction petFunction) {
+        this.petFunction = petFunction;
+    }
     
     public AmiyaChatFunction(
             BaseBotLogic botLogic,
@@ -119,12 +128,12 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
                 }
             });
         }
-        try {
-            patPatCoreKt = PatPatCoreKt.INSTANCE;
-        } catch (Error e) {
-            patPatCoreKt = null;
-            log.error("cannot init patPatCoreKt:" + e.getMessage());
-        }
+//        try {
+//            patPatCoreKt = PatPatCoreKt.INSTANCE;
+//        } catch (Error e) {
+//            patPatCoreKt = null;
+//            log.error("cannot init patPatCoreKt:" + e.getMessage());
+//        }
         initExternalResource();
     }
     
@@ -175,10 +184,13 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
                 }
             }
             
-            for (int i = 0; i < PATPAT_HANDS_SIZE; i++) {
-                patpatHandFiles[i] = (resolveFunctionDataFile("patpat/img" + i + ".png"));
+//            for (int i = 0; i < PATPAT_HANDS_SIZE; i++) {
+//                patpatHandFiles[i] = (resolveFunctionDataFile("patpat/img" + i + ".png"));
+//            }
+            try (InputStream stream = new FileInputStream(resolveFunctionDataFile("patpat/all.png"))) {
+                oceanCatAll = ImageIO.read(stream);
             }
-            oceanCatAll = ExternalResource.create(resolveFunctionDataFile("patpat/all.png"));
+            
         } catch (Exception e) {
             log.error("initExternalResource error: " + e.getMessage());
         }
@@ -265,10 +277,11 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
     }
     
     private Message nudgeReplyByPatPat(NudgeEvent event) {
-        var targetAvatarImage = UtilsKt.getContactOrBotAvatarImage(event.getFrom());
-        if (targetAvatarImage != null) {
+        BufferedImage to = petFunction.userAvatarOrDefaultAvatar(event);
+        
+        if (to != null) {
             FunctionReplyReceiver receiver = new FunctionReplyReceiver(event.getSubject(), log);
-            return patpat(receiver, targetAvatarImage, null);
+            return patpatCore(receiver, to);
         }
         return new PlainText("获取对象用户头像失败");
     }
@@ -318,10 +331,10 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
                         );
             }
         } else if (message.contains("海猫") && (message.contains("all") || message.contains("All") || message.contains("ALL"))) {
-            var targetAvatarImage = UtilsKt.externalResourceToSkioImage(oceanCatAll);
-            var outputMessage = patpat(subject, targetAvatarImage, "oceanCatAll");
+            var to = oceanCatAll;
+            var reply = patpatCore(subject, to);
             subject.sendMessage(
-                    outputMessage
+                    reply
                     );
         } else {
             for (String pattern : listenConfigData.keySet()) {
@@ -345,29 +358,15 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
         return null;
     }
     
-    private Message patpat(FunctionReplyReceiver receiver, org.jetbrains.skia.Image targetAvatarImage, String cacheId) {
-
-        ExternalResource externalResource = null;
-        if (cacheId != null) {
-            Function<String, InputStream> uncachedPatPatFileProvider = it -> calculatePatPatImage(targetAvatarImage);
-            File patpatResultFile = cacheableFileHelper.fromCacheOrProvider(cacheId, uncachedPatPatFileProvider);
-            externalResource = ExternalResource.create(patpatResultFile).toAutoCloseable();
+    private Message patpatCore(FunctionReplyReceiver receiver, BufferedImage to) {
+        var resultFile = petFunction.petService(null, to, "patpat");
+        if (resultFile != null) {
+            ExternalResource externalResource = ExternalResource.create(resultFile).toAutoCloseable();
+            Message message = receiver.uploadImageOrNotSupportPlaceholder(externalResource);
+            return message;
         } else {
-            try (InputStream inputStream = calculatePatPatImage(targetAvatarImage)) {
-                externalResource = ExternalResource.create(inputStream).toAutoCloseable();
-            } catch (Exception e) {
-                log.error("patpat externalResource error: " + e.getMessage());
-            }
+            return new PlainText("patpatCore失败");
         }
-        
-        Message message = receiver.uploadImageOrNotSupportPlaceholder(externalResource);
-        return message;
-
-    }
-
-    private InputStream calculatePatPatImage(org.jetbrains.skia.Image targetAvatarImage) {
-        var patpatResult = patPatCoreKt.patpat(targetAvatarImage, patpatHandFiles, 0.05);
-        return new ByteArrayInputStream(patpatResult.getBytes());
     }
 
 }

@@ -107,4 +107,9 @@ public class AllCompositeCommandProxy extends AbstractAllCompositeCommandProxy<A
     public void playPhoneTest(CommandSender sender, User target) {
         botLogic.amiyaImageFunction.getCommandComponent().playPhone(sender, target);
     }
+    
+    @SubCommand("玩test")
+    public void playPhoneTest(CommandSender sender) {
+        botLogic.amiyaImageFunction.getCommandComponent().playPhoneTest(sender);
+    }
 }

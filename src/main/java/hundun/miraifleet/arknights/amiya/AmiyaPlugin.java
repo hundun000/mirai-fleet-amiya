@@ -41,22 +41,4 @@ public static final AmiyaPlugin INSTANCE = new AmiyaPlugin();
         // 由GC回收即可
         botLogic = null;
     }
-    
-    
-    private static void foo(String arg) {
-        
-    }
-    
-    private static void test() {
-        String myArg1 = "hi";
-        String myArg2 = "hi";
-        foo(myArg1);
-        foo(myArg2);
-        foo(myArg1);
-
-        if (true) {
-            foo(myArg1);
-            foo(myArg2);
-        }
-    }
 }

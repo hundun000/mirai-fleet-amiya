@@ -2,6 +2,7 @@ package hundun.miraifleet.arknights.amiya.botlogic;
 
 import hundun.miraifleet.arknights.amiya.botlogic.function.chat.AmiyaChatFunction;
 import hundun.miraifleet.arknights.amiya.botlogic.function.image.AmiyaImageFunction;
+import hundun.miraifleet.arknights.amiya.botlogic.function.share.SharedPetFunction;
 import hundun.miraifleet.framework.core.botlogic.BaseBotLogic;
 import hundun.miraifleet.framework.core.botlogic.BaseJavaBotLogic;
 import hundun.miraifleet.framework.starter.botlogic.function.CharacterHelpFunction;
@@ -68,6 +69,10 @@ public class AmiyaBotLogic extends BaseJavaBotLogic {
         functions.add(musicCompositeFunction);
         musicSimpleFunction = new MusicSimpleFunction(this, plugin, characterName);
         functions.add(musicSimpleFunction);
+        
+        SharedPetFunction petFunction = new SharedPetFunction(this, plugin, characterName);
+        amiyaChatFunction.lazyInitSharedFunction(petFunction);
+        amiyaImageFunction.lazyInitSharedFunction(petFunction);
         
         allCompositeCommandProxy = new AllCompositeCommandProxy(this, plugin, characterName);
     }
