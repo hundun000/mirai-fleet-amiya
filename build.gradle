@@ -31,7 +31,8 @@ apply plugin: 'java-library'
 //    }
 //}
 
-group = 'usless.group.Name'
+// group = 'usless.group.Name'
+
 // version used in mirai: buildPlugin
 version = '-SNAPSHOT'
 java {
