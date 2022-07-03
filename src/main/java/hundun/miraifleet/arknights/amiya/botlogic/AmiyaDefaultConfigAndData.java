@@ -8,7 +8,7 @@ import java.util.function.Supplier;
 import hundun.miraifleet.arknights.amiya.botlogic.function.chat.ListenConfig;
 import hundun.miraifleet.arknights.amiya.botlogic.function.chat.NudgeConfig;
 import hundun.miraifleet.arknights.amiya.botlogic.function.chat.NudgeConfig.NudgeReply;
-import hundun.miraifleet.framework.core.helper.repository.SingletonDocumentRepository;
+import hundun.miraifleet.framework.helper.repository.SingletonDocumentRepository;
 import hundun.miraifleet.framework.starter.botlogic.function.reminder.config.HourlyChatConfig;
 import hundun.miraifleet.framework.starter.botlogic.function.reminder.domain.ReminderItem;
 import hundun.miraifleet.framework.starter.botlogic.function.reminder.domain.ReminderList;
@@ -44,7 +44,7 @@ public class AmiyaDefaultConfigAndData {
         return mapOf(SingletonDocumentRepository.THE_SINGLETON_KEY, v);
     }
     
-    public static Supplier<Map<String, WeiboConfig>> weiboConfigDefaultDataSupplier() {
+    public static Supplier<WeiboConfig> weiboConfigDefaultDataSupplier() {
         return () -> {
             WeiboConfig weiboConfig = new WeiboConfig(
                     mapOf(
@@ -55,21 +55,19 @@ public class AmiyaDefaultConfigAndData {
                     mapOf(
                             "7499841383", Arrays.asList(WeiboPushFilterFlag.RETWEET))
                     );
-            Map<String, WeiboConfig> defaultData = mapOf(SingletonDocumentRepository.THE_SINGLETON_KEY, weiboConfig);
-            return defaultData;
+            return weiboConfig;
         };
     }
     
-    public static Supplier<Map<String, ReminderList>> reminderListDefaultDataSupplier() {
+    public static Supplier<ReminderList> reminderListDefaultDataSupplier() {
         return () -> {
             ReminderList reminderList = new ReminderList();
             reminderList.setItems(Arrays.asList(new ReminderItem(null, "现在是周日晚上10点。请博士记得完成本周剿灭作战。", "* 0 22 ? * 1")));
-            Map<String, ReminderList> defaultData = mapOf(SingletonDocumentRepository.THE_SINGLETON_KEY, reminderList);
-            return defaultData;
+            return reminderList;
         };
     }
     
-    public static Supplier<Map<String, ListenConfig>> listenConfigDefaultDataSupplier() {
+    public static Supplier<ListenConfig> listenConfigDefaultDataSupplier() {
         return () -> {
             ListenConfig listenConfig = new ListenConfig();
             listenConfig.setListens(
@@ -81,19 +79,19 @@ public class AmiyaDefaultConfigAndData {
                                     ) 
                     )
             );
-            return toSingletonMap(listenConfig);
+            return listenConfig;
         };
     }
     
-    public static Supplier<Map<String, NudgeConfig>> nudgeConfigDefaultDataSupplier() {
+    public static Supplier<NudgeConfig> nudgeConfigDefaultDataSupplier() {
         return () -> {
             NudgeConfig listenConfig = new NudgeConfig();
             listenConfig.setNudgeReply(NudgeReply.PATPAT);
-            return toSingletonMap(listenConfig);
+            return listenConfig;
         };
     }
     
-    public static Supplier<Map<String, HourlyChatConfig>> hourlyChatConfigDefaultDataSupplier() {
+    public static Supplier<HourlyChatConfig> hourlyChatConfigDefaultDataSupplier() {
         return () -> {
             HourlyChatConfig hourlyChatConfig = new HourlyChatConfig();
             Map<String, String> chatTexts = new HashMap<>();
@@ -116,8 +114,7 @@ public class AmiyaDefaultConfigAndData {
             chatTexts.put("23", "二十三点到了。有什么想喝的吗，博士？");
             
             hourlyChatConfig.setChatTexts(chatTexts);
-            Map<String, HourlyChatConfig> defaultData = mapOf(SingletonDocumentRepository.THE_SINGLETON_KEY, hourlyChatConfig);
-            return defaultData;
+            return hourlyChatConfig;
         };
     }
 }

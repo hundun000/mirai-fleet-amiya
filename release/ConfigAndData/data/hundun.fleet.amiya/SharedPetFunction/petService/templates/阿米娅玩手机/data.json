@@ -1,11 +1,14 @@
 {
   "type": "GIF",
-  "avatar": "SINGLE",
-  "pos": [
-    [195,390,90,90], [200,390,90,90], [200,395,90,90], [200,395,90,90]
+  "avatar": [
+    {
+      "type": "TO",
+      "pos": [
+        [195,390,90,90], [200,390,90,90], [200,395,90,90], [200,395,90,90]
+      ],
+      "round": false,
+      "avatarOnTop": false
+    }
   ],
-  "text": "",
-  "round": false,
-  "rotate": false,
-  "avatarOnTop": false
+  "text": []
 }

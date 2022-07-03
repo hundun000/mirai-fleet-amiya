@@ -1,7 +1,6 @@
 package hundun.miraifleet.arknights.amiya.botlogic.function.chat;
 
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -13,7 +12,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import javax.imageio.ImageIO;
@@ -21,38 +19,22 @@ import javax.imageio.ImageIO;
 import org.jetbrains.annotations.NotNull;
 
 import hundun.miraifleet.arknights.amiya.botlogic.function.chat.NudgeConfig.NudgeReply;
-import hundun.miraifleet.arknights.amiya.botlogic.function.share.SharedPetFunction;
 import hundun.miraifleet.framework.core.botlogic.BaseBotLogic;
 import hundun.miraifleet.framework.core.function.AsListenerHost;
 import hundun.miraifleet.framework.core.function.BaseFunction;
 import hundun.miraifleet.framework.core.function.FunctionReplyReceiver;
-import hundun.miraifleet.framework.core.helper.file.CacheableFileHelper;
-import hundun.miraifleet.framework.core.helper.repository.SingletonDocumentRepository;
-import hundun.miraifleet.framework.starter.botlogic.function.RepeatFunction.SessionData;
-import hundun.miraifleet.framework.starter.botlogic.function.reminder.config.HourlyChatConfig;
-import hundun.miraifleet.image.share.function.PatPatCoreKt;
-import hundun.miraifleet.image.share.function.UtilsKt;
+import hundun.miraifleet.framework.helper.repository.SingletonDocumentRepository;
+import hundun.miraifleet.image.share.function.SharedPetFunction;
 import net.mamoe.mirai.console.command.AbstractCommand;
-import net.mamoe.mirai.console.command.BuiltInCommands;
-import net.mamoe.mirai.console.command.CommandManager;
-import net.mamoe.mirai.console.command.CommandSender;
-import net.mamoe.mirai.console.internal.command.CommandManagerImpl;
 import net.mamoe.mirai.console.plugin.jvm.JvmPlugin;
-import net.mamoe.mirai.contact.Contact;
-import net.mamoe.mirai.contact.Group;
 import net.mamoe.mirai.event.EventHandler;
 import net.mamoe.mirai.event.events.AbstractMessageEvent;
-import net.mamoe.mirai.event.events.GroupMessageEvent;
 import net.mamoe.mirai.event.events.NudgeEvent;
-import net.mamoe.mirai.message.code.MiraiCode;
 import net.mamoe.mirai.message.data.At;
 import net.mamoe.mirai.message.data.Audio;
 import net.mamoe.mirai.message.data.Image;
 import net.mamoe.mirai.message.data.Message;
-import net.mamoe.mirai.message.data.MessageChain;
-import net.mamoe.mirai.message.data.MessageChainBuilder;
 import net.mamoe.mirai.message.data.PlainText;
-import net.mamoe.mirai.message.data.Voice;
 import net.mamoe.mirai.utils.ExternalResource;
 
 /**
@@ -65,20 +47,16 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
     SingletonDocumentRepository<ListenConfig> listenConfigRepository;
     SingletonDocumentRepository<NudgeConfig> nudgeConfigRepository;
     Random rand = new Random();
-//    private PatPatCoreKt patPatCoreKt;
-//    private static final int PATPAT_HANDS_SIZE = 5;
-//    private final File[] patpatHandFiles = new File[PATPAT_HANDS_SIZE];
-    private final CacheableFileHelper cacheableFileHelper;
     
     // ------ 下班 ------
     private String cannotRelaxTalk = "博士，您还有许多事情需要处理。现在还不能休息哦。";
     private String canRelaxTalk = "博士，辛苦了！累了的话请休息一会儿吧。";
-    ExternalResource cannotRelaxExternalResource;
-    ExternalResource canRelaxExternalResource;
+    File cannotRelaxExternalResource;
+    File canRelaxExternalResource;
     int forceTodayIsHoliday = -1;
     int forceTodayIsWorkday = -1;
     // ------ damedane ------
-    ExternalResource damedaneVoiceExternalResource;
+    File damedaneVoiceExternalResource;
     // ------ nudge ------
     List<ExternalResource> selfNudgeFaces = new ArrayList<>();
     Map<Long, ExternalResource> otherNudgeFaces = new HashMap<>();
@@ -88,16 +66,17 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
     Map<String, List<String>> listenConfigData = new LinkedHashMap<>();
     
     private SharedPetFunction petFunction;
-    public void lazyInitSharedFunction(SharedPetFunction petFunction) {
+    public AmiyaChatFunction lazyInitSharedFunction(SharedPetFunction petFunction) {
         this.petFunction = petFunction;
+        return this;
     }
     
     public AmiyaChatFunction(
             BaseBotLogic botLogic,
             JvmPlugin plugin, 
             String characterName, 
-            Supplier<Map<String, ListenConfig>> supplier,
-            Supplier<Map<String, NudgeConfig>> supplierNudgeConfig
+            Supplier<ListenConfig> supplier,
+            Supplier<NudgeConfig> supplierNudgeConfig
             ) {
         super(
                 botLogic,
@@ -106,7 +85,6 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
                 "AmiyaChatFunction", 
                 null
                 );
-        this.cacheableFileHelper = new CacheableFileHelper(resolveFunctionCacheFileFolder(), plugin.getLogger());
         this.listenConfigRepository = new SingletonDocumentRepository<>(
                 plugin, 
                 resolveFunctionConfigFile("ListenConfig.json"), 
@@ -151,9 +129,9 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
     
     private void initExternalResource() {
         try {
-            cannotRelaxExternalResource = ExternalResource.create(plugin.resolveDataFile(functionName + File.separator + "cannotRelax.png"));
-            canRelaxExternalResource = ExternalResource.create(plugin.resolveDataFile(functionName + File.separator + "canRelax.png"));
-            damedaneVoiceExternalResource = ExternalResource.create(plugin.resolveDataFile(functionName + File.separator + "damedane.amr"));
+            cannotRelaxExternalResource = plugin.resolveDataFile(functionName + File.separator + "cannotRelax.png");
+            canRelaxExternalResource = plugin.resolveDataFile(functionName + File.separator + "canRelax.png");
+            damedaneVoiceExternalResource = plugin.resolveDataFile(functionName + File.separator + "damedane.amr");
             
             File facesFolder = plugin.resolveDataFile(functionName + File.separator + "selfNudgeFaces");
             if (facesFolder.exists() && facesFolder.isDirectory()) {
@@ -253,7 +231,7 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
                 if (nudgeConfig.getNudgeReply() == NudgeReply.RANDOM_FACE) {
                     int index = rand.nextInt(selfNudgeFaces.size());
                     log.info("use selfNudgeFaces index = " + index);
-                    message = receiver.uploadImageOrNotSupportPlaceholder(selfNudgeFaces.get(index));
+                    message = receiver.uploadImageAndCloseOrNotSupportPlaceholder(selfNudgeFaces.get(index));
                 } else if (nudgeConfig.getNudgeReply() == NudgeReply.PATPAT) {
                     message = nudgeReplyByPatPat(event);
                 } else {
@@ -261,7 +239,7 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
                 }
             } else if (otherNudgeFaces.containsKey(targetId)) {
                 ExternalResource specialNudgeFace = otherNudgeFaces.get(targetId);
-                message = receiver.uploadImageOrNotSupportPlaceholder(specialNudgeFace);
+                message = receiver.uploadImageAndCloseOrNotSupportPlaceholder(specialNudgeFace);
             } else {
                 // nudge-target is normal member, do nothing
                 return;
@@ -292,7 +270,7 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
         if (message.contains("下班")) {
             boolean canRelax = canRelax();
             if (canRelax) {
-                Image image = subject.uploadImage(canRelaxExternalResource);
+                Image image = subject.uploadImageAndClose(ExternalResource.create(canRelaxExternalResource));
                 if (image != null) {
                     subject.sendMessage(
                             new PlainText(canRelaxTalk)
@@ -305,7 +283,7 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
                             );
                 }
             } else {
-                Image image = subject.uploadImage(cannotRelaxExternalResource);
+                Image image = subject.uploadImageAndClose(ExternalResource.create(cannotRelaxExternalResource));
                 if (image != null) {
                     subject.sendMessage(
                             new PlainText(cannotRelaxTalk)
@@ -319,7 +297,7 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
                 }
             }
         } else if (message.contains("damedane")) {
-            Audio voice = subject.uploadVoice(damedaneVoiceExternalResource);
+            Audio voice = subject.uploadVoiceAndClose(ExternalResource.create(damedaneVoiceExternalResource));
             if (voice != null) {
                 subject.sendMessage(
                         new PlainText("")
@@ -362,7 +340,7 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
         var resultFile = petFunction.petService(null, to, "patpat");
         if (resultFile != null) {
             ExternalResource externalResource = ExternalResource.create(resultFile).toAutoCloseable();
-            Message message = receiver.uploadImageOrNotSupportPlaceholder(externalResource);
+            Message message = receiver.uploadImageAndCloseOrNotSupportPlaceholder(externalResource);
             return message;
         } else {
             return new PlainText("patpatCore失败");

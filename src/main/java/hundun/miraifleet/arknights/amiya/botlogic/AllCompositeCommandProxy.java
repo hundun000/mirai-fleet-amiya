@@ -3,9 +3,17 @@ package hundun.miraifleet.arknights.amiya.botlogic;
 import java.util.Map;
 import java.util.function.Supplier;
 
+import hundun.miraifleet.arknights.amiya.botlogic.function.image.AmiyaImageFunction;
 import hundun.miraifleet.framework.core.function.AbstractAllCompositeCommandProxy;
 import hundun.miraifleet.framework.core.function.FunctionReplyReceiver;
+import hundun.miraifleet.framework.starter.botlogic.function.CharacterHelpFunction;
+import hundun.miraifleet.framework.starter.botlogic.function.drive.DriveFunction;
+import hundun.miraifleet.framework.starter.botlogic.function.reminder.ReminderFunction;
+import hundun.miraifleet.framework.starter.botlogic.function.weibo.WeiboFunction;
 import hundun.miraifleet.framework.starter.botlogic.function.weibo.config.WeiboViewFormat;
+import hundun.miraifleet.music.share.function.music.MusicMidiFunction;
+import hundun.miraifleet.music.share.function.music.search.MusicSearchCompositeFunction;
+import hundun.miraifleet.music.share.function.music.search.MusicSearchSimpleFunction;
 import net.mamoe.mirai.console.command.CommandOwner;
 import net.mamoe.mirai.console.command.CommandSender;
 import net.mamoe.mirai.console.command.CompositeCommand;
@@ -35,17 +43,17 @@ public class AllCompositeCommandProxy extends AbstractAllCompositeCommandProxy<A
     
     @SubCommand("查询报时")
     public void listHourlyChatConfig(CommandSender sender) {
-        botLogic.reminderFunction.getCommandComponent().listHourlyChatConfig(sender);
+        botLogic.getFunction(ReminderFunction.class).getCommandComponent().listHourlyChatConfig(sender);
     }
     
     @SubCommand("查询提醒")
     public void listReminderListChatConfig(CommandSender sender) {
-        botLogic.reminderFunction.getCommandComponent().listReminderListChatConfig(sender);
+        botLogic.getFunction(ReminderFunction.class).getCommandComponent().listReminderListChatConfig(sender);
     }
     
     @SubCommand("删除提醒")
     public void deleteReminderListChatConfig(CommandSender sender, int id) {
-        botLogic.reminderFunction.getCommandComponent().deleteReminderListChatConfig(sender, id);
+        botLogic.getFunction(ReminderFunction.class).getCommandComponent().deleteReminderListChatConfig(sender, id);
     }
     
     @SubCommand("创建提醒")
@@ -54,62 +62,67 @@ public class AllCompositeCommandProxy extends AbstractAllCompositeCommandProxy<A
             String countRawFomat,
             String text
             ) {
-        botLogic.reminderFunction.getCommandComponent().insertReminderListChatConfig(sender, cornRawFomat, countRawFomat, text);
+        botLogic.getFunction(ReminderFunction.class).getCommandComponent().insertReminderListChatConfig(sender, cornRawFomat, countRawFomat, text);
     }
     
     
     @SubCommand("微博订阅")
     public void listListen(CommandSender sender) {
-        botLogic.weiboFunction.getCommandComponent().listListen(sender);
+        botLogic.getFunction(WeiboFunction.class).getCommandComponent().listListen(sender);
     }
     
     @SubCommand("最新微博")
     public void listTopSummary(CommandSender sender) {
-        botLogic.weiboFunction.getCommandComponent().listTopSummary(sender);
+        botLogic.getFunction(WeiboFunction.class).getCommandComponent().listTopSummary(sender);
     }
     
     @SubCommand("最新微博")
     public void listTopForUid(CommandSender sender, String name) {
-        botLogic.weiboFunction.getCommandComponent().listTopForUid(sender, name);
+        botLogic.getFunction(WeiboFunction.class).getCommandComponent().listTopForUid(sender, name);
     }
 
     @SubCommand("立刻私聊")
     public void chat(CommandSender sender, User target, String messageCode) {
-        botLogic.driveFunction.getCommandComponent().chat(sender, target, messageCode);
+        botLogic.getFunction(DriveFunction.class).getCommandComponent().chat(sender, target, messageCode);
     }
     
     @SubCommand("立刻群聊")
     public void chat(CommandSender sender, Group target, String messageCode) {
-        botLogic.driveFunction.getCommandComponent().chat(sender, target, messageCode);
+        botLogic.getFunction(DriveFunction.class).getCommandComponent().chat(sender, target, messageCode);
     }
 
     @SubCommand("help")
     public void help(CommandSender sender) {
-        botLogic.characterHelpFunction.getCommandComponent().help(sender);
+        botLogic.getFunction(CharacterHelpFunction.class).getCommandComponent().help(sender);
     }
     
     @SubCommand("音乐")
     public void help(CommandSender sender, String arg, String... args) {
-        botLogic.musicSimpleFunction.getCommandComponent().fromCommand(sender, arg, args);
+        botLogic.getFunction(MusicSearchSimpleFunction.class).getCommandComponent().fromCommand(sender, arg, args);
     }
     
     @SubCommand("QQ音乐")
     public void searchQQ(CommandSender sender, String arg, String... args) {
-        botLogic.musicCompositeFunction.getCommandComponent().fromCommand(sender, arg, args);
+        botLogic.getFunction(MusicSearchCompositeFunction.class).getCommandComponent().searchQQ(sender, arg, args);
     }
     
     @SubCommand({"网易", "网易云"})
     public void searchNetEase(CommandSender sender, String arg, String... args) {
-        botLogic.musicCompositeFunction.getCommandComponent().searchNetEase(sender, arg, args);
+        botLogic.getFunction(MusicSearchCompositeFunction.class).getCommandComponent().searchNetEase(sender, arg, args);
+    }
+    
+    @SubCommand({"midi"})
+    public void midi(CommandSender sender, String arg, String... args) {
+        botLogic.getFunction(MusicMidiFunction.class).getCommandComponent().midi(sender, arg, args);
     }
     
     @SubCommand("玩")
     public void playPhoneTest(CommandSender sender, User target) {
-        botLogic.amiyaImageFunction.getCommandComponent().playPhone(sender, target);
+        botLogic.getFunction(AmiyaImageFunction.class).getCommandComponent().playPhone(sender, target);
     }
     
     @SubCommand("玩test")
     public void playPhoneTest(CommandSender sender) {
-        botLogic.amiyaImageFunction.getCommandComponent().playPhoneTest(sender);
+        botLogic.getFunction(AmiyaImageFunction.class).getCommandComponent().playPhoneTest(sender);
     }
 }
