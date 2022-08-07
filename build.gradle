@@ -70,7 +70,7 @@ dependencies {
     //implementation 'io.github.openfeign:feign-jackson:11.1'
     //implementation 'io.github.openfeign:feign-core:11.1'
     
-    implementation 'com.github.hundun000.mirai-fleet-framework:framework-starter:0.6.1'
+    implementation 'com.github.hundun000.mirai-fleet-framework:framework-starter:0.7.0'
     implementation 'com.github.hundun000:mirai-fleet-music:edf53d21a3'
     implementation 'com.github.hundun000:mirai-fleet-image:4d9dab9309'
     

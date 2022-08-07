@@ -51,6 +51,11 @@ public class AllCompositeCommandProxy extends AbstractAllCompositeCommandProxy<A
         botLogic.getFunction(ReminderFunction.class).getCommandComponent().listReminderListChatConfig(sender);
     }
     
+    @SubCommand("debugTimerCallReminderItem")
+    public void debugTimerCallReminderItem(CommandSender sender, String timeString) {
+        botLogic.getFunction(ReminderFunction.class).getCommandComponent().debugTimerCallReminderItem(sender, timeString);
+    }
+    
     @SubCommand("删除提醒")
     public void deleteReminderListChatConfig(CommandSender sender, int id) {
         botLogic.getFunction(ReminderFunction.class).getCommandComponent().deleteReminderListChatConfig(sender, id);
