@@ -7,12 +7,10 @@ import hundun.miraifleet.framework.starter.botlogic.function.CharacterAdminHelpe
 import hundun.miraifleet.framework.starter.botlogic.function.CharacterHelpFunction;
 import hundun.miraifleet.framework.starter.botlogic.function.RepeatFunction;
 import hundun.miraifleet.framework.starter.botlogic.function.drive.DriveFunction;
-import hundun.miraifleet.framework.starter.botlogic.function.reminder.ReminderFunction;
 import hundun.miraifleet.framework.starter.botlogic.function.weibo.WeiboFunction;
 import hundun.miraifleet.image.share.function.SharedPetFunction;
 import hundun.miraifleet.music.share.function.music.MusicMidiFunction;
-import hundun.miraifleet.music.share.function.music.search.MusicSearchCompositeFunction;
-import hundun.miraifleet.music.share.function.music.search.MusicSearchSimpleFunction;
+import hundun.miraifleet.reminder.share.function.reminder.ReminderFunction;
 import net.mamoe.mirai.console.plugin.jvm.JavaPlugin;
 
 /**

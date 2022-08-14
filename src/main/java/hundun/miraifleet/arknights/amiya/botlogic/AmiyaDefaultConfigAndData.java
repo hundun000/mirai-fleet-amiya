@@ -11,13 +11,13 @@ import hundun.miraifleet.arknights.amiya.botlogic.function.chat.ListenConfig;
 import hundun.miraifleet.arknights.amiya.botlogic.function.chat.NudgeConfig;
 import hundun.miraifleet.arknights.amiya.botlogic.function.chat.NudgeConfig.NudgeReply;
 import hundun.miraifleet.framework.helper.repository.SingletonDocumentRepository;
-import hundun.miraifleet.framework.starter.botlogic.function.reminder.ReminderFunction;
-import hundun.miraifleet.framework.starter.botlogic.function.reminder.data.HourlyChatConfigV2;
-import hundun.miraifleet.framework.starter.botlogic.function.reminder.data.ReminderItem;
-import hundun.miraifleet.framework.starter.botlogic.function.reminder.data.ReminderList;
 import hundun.miraifleet.framework.starter.botlogic.function.weibo.config.WeiboConfig;
 import hundun.miraifleet.framework.starter.botlogic.function.weibo.config.WeiboPushFilterFlag;
 import hundun.miraifleet.framework.starter.botlogic.function.weibo.config.WeiboViewFormat;
+import hundun.miraifleet.reminder.share.function.reminder.data.HourlyChatConfigV2;
+import hundun.miraifleet.reminder.share.function.reminder.data.ReminderItem;
+import hundun.miraifleet.reminder.share.function.reminder.data.ReminderList;
+
 
 /**
  * @author hundun
@@ -66,7 +66,7 @@ public class AmiyaDefaultConfigAndData {
         return () -> {
             ReminderList reminderList = new ReminderList();
             reminderList.setItems(Arrays.asList(
-                    ReminderItem.Factory.create("* 0 22 ? * 1", "现在是周日晚上10点。请博士记得完成本周剿灭作战。", null)
+                    ReminderItem.Factory.create("* 0 22 ? * 1", "现在是周日晚上10点。请博士记得完成本周剿灭作战。")
                     ));
             return reminderList;
         };
@@ -100,58 +100,26 @@ public class AmiyaDefaultConfigAndData {
         return () -> {
             HourlyChatConfigV2 hourlyChatConfig = new HourlyChatConfigV2();
             List<ReminderItem> chatTexts = new ArrayList<>();
-            chatTexts.add(create(0, "呜哇！？正好0点！今天是，由阿米娅来担当助理的工作呢。我不会辜负大家的。"));
-            chatTexts.add(create(1, "凌晨一点到啦！凯尔希医生教导过我，工作的时候一定要保持全神贯注......嗯，全神贯注。"));
-            chatTexts.add(create(9, "九点到了。罗德岛全舰正处于通常航行状态。博士，整理下航程信息吧？", "阿米娅_交谈2.amr", "九点.png"));
-            chatTexts.add(create(10, "十点到了。欸嘿嘿......"));
-            chatTexts.add(create(11, "十一点到了。欸嘿嘿......"));
-            chatTexts.add(create(12, "十二点到了。欸嘿嘿......"));
-            chatTexts.add(create(13, "十三点到了。欸嘿嘿......"));
-            chatTexts.add(create(14, "十四点到了。欸嘿嘿......"));
-            chatTexts.add(create(15, "十五点到了。欸嘿嘿......"));
-            chatTexts.add(create(16, "十六点到了。欸嘿嘿......"));
-            chatTexts.add(create(17, "十七点到了。博士，辛苦了！累了的话请休息一会儿吧。"));
-            chatTexts.add(create(18, "十八点到了。欸嘿嘿......"));
-            chatTexts.add(create(19, "十九点到了。欸嘿嘿......"));
-            chatTexts.add(create(20, "二十点到了。欸嘿嘿......"));
-            chatTexts.add(create(21, "二十一点到了。欸嘿嘿......"));
-            chatTexts.add(create(22, "完全入夜了呢，二十二点到了。博士，您工作辛苦了。"));
-            chatTexts.add(create(23, "二十三点到了。有什么想喝的吗，博士？"));
+            chatTexts.add(ReminderItem.Factory.createHourly(0, "呜哇！？正好0点！今天是，由阿米娅来担当助理的工作呢。我不会辜负大家的。"));
+            chatTexts.add(ReminderItem.Factory.createHourly(1, "凌晨一点到啦！凯尔希医生教导过我，工作的时候一定要保持全神贯注......嗯，全神贯注。"));
+            chatTexts.add(ReminderItem.Factory.createHourly(9, "九点到了。罗德岛全舰正处于通常航行状态。博士，整理下航程信息吧？", "阿米娅_交谈2.amr", "九点.png"));
+            chatTexts.add(ReminderItem.Factory.createHourly(10, "十点到了。欸嘿嘿......"));
+            chatTexts.add(ReminderItem.Factory.createHourly(11, "十一点到了。欸嘿嘿......"));
+            chatTexts.add(ReminderItem.Factory.createHourly(12, "十二点到了。欸嘿嘿......"));
+            chatTexts.add(ReminderItem.Factory.createHourly(13, "十三点到了。欸嘿嘿......"));
+            chatTexts.add(ReminderItem.Factory.createHourly(14, "十四点到了。欸嘿嘿......"));
+            chatTexts.add(ReminderItem.Factory.createHourly(15, "十五点到了。欸嘿嘿......"));
+            chatTexts.add(ReminderItem.Factory.createHourly(16, "十六点到了。欸嘿嘿......"));
+            chatTexts.add(ReminderItem.Factory.createHourly(17, "十七点到了。博士，辛苦了！累了的话请休息一会儿吧。"));
+            chatTexts.add(ReminderItem.Factory.createHourly(18, "十八点到了。欸嘿嘿......"));
+            chatTexts.add(ReminderItem.Factory.createHourly(19, "十九点到了。欸嘿嘿......"));
+            chatTexts.add(ReminderItem.Factory.createHourly(20, "二十点到了。欸嘿嘿......"));
+            chatTexts.add(ReminderItem.Factory.createHourly(21, "二十一点到了。欸嘿嘿......"));
+            chatTexts.add(ReminderItem.Factory.createHourly(22, "完全入夜了呢，二十二点到了。博士，您工作辛苦了。"));
+            chatTexts.add(ReminderItem.Factory.createHourly(23, "二十三点到了。有什么想喝的吗，博士？"));
             
             hourlyChatConfig.setItems(chatTexts);
             return hourlyChatConfig;
         };
-    }
-    
-    private static ReminderItem create(
-            int hourCondition,
-            String text
-            ) {
-        return create(hourCondition, text, null, null);
-    }
-    
-    private static ReminderItem create(
-            int hourCondition,
-            String text,
-            String audioFileName,
-            String imageFileName
-            ) {
-        ReminderItem task = new ReminderItem();
-        String cron = "* 0 " + hourCondition + " * * ?";
-        task.setCron(cron);
-        task.setCount(null);
-        
-        List<String> codes = new ArrayList<>();
-        if (text != null) {
-            codes.add(text);
-        }
-        if (imageFileName != null) {
-            codes.add(ReminderFunction.IMAGE_CODE_PREFIX + imageFileName);
-        }
-        if (audioFileName != null) {
-            codes.add(ReminderFunction.AUDIO_CODE_PREFIX + audioFileName);
-        }
-        task.setReminderMessageCodes(codes);
-        return task;
     }
 }
