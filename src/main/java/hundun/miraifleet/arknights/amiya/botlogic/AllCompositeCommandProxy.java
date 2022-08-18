@@ -101,20 +101,20 @@ public class AllCompositeCommandProxy extends AbstractAllCompositeCommandProxy<A
         botLogic.getFunction(CharacterHelpFunction.class).getCommandComponent().help(sender);
     }
     
-    @SubCommand("音乐")
-    public void help(CommandSender sender, String arg, String... args) {
-        botLogic.getFunction(MusicSearchSimpleFunction.class).getCommandComponent().fromCommand(sender, arg, args);
-    }
-    
-    @SubCommand("QQ音乐")
-    public void searchQQ(CommandSender sender, String arg, String... args) {
-        botLogic.getFunction(MusicSearchCompositeFunction.class).getCommandComponent().searchQQ(sender, arg, args);
-    }
-    
-    @SubCommand({"网易", "网易云"})
-    public void searchNetEase(CommandSender sender, String arg, String... args) {
-        botLogic.getFunction(MusicSearchCompositeFunction.class).getCommandComponent().searchNetEase(sender, arg, args);
-    }
+//    @SubCommand("音乐")
+//    public void help(CommandSender sender, String arg, String... args) {
+//        botLogic.getFunction(MusicSearchSimpleFunction.class).getCommandComponent().fromCommand(sender, arg, args);
+//    }
+//    
+//    @SubCommand("QQ音乐")
+//    public void searchQQ(CommandSender sender, String arg, String... args) {
+//        botLogic.getFunction(MusicSearchCompositeFunction.class).getCommandComponent().searchQQ(sender, arg, args);
+//    }
+//    
+//    @SubCommand({"网易", "网易云"})
+//    public void searchNetEase(CommandSender sender, String arg, String... args) {
+//        botLogic.getFunction(MusicSearchCompositeFunction.class).getCommandComponent().searchNetEase(sender, arg, args);
+//    }
     
     @SubCommand({"midi"})
     public void midi(CommandSender sender, String arg, String... args) {

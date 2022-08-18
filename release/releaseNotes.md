@@ -1,3 +1,16 @@
+## v0.7.1
+
+开发者测试时使用的mirai-console版本：2.11.0（建议用户不要落后太多版本）
+
+### 修复
+
+- 修复`v0.7.0`起`阿米娅闲聊`的戳一戳回复图片未正常工作。
+- 修复`v0.6.0`移除`搜音乐`功能但未成功移除。
+
+### ConfigAndData变化：  
+
+- 将`data\hundun.fleet.amiya\ReminderFunction\audios`中样例文件改为PC端可听的`amr`格式
+
 ## v0.7.0
 
 开发者测试时使用的mirai-console版本：2.11.0（建议用户不要落后太多版本）

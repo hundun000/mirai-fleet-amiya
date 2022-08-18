@@ -58,8 +58,8 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
     // ------ damedane ------
     File damedaneVoiceExternalResource;
     // ------ nudge ------
-    List<ExternalResource> selfNudgeFaces = new ArrayList<>();
-    Map<Long, ExternalResource> otherNudgeFaces = new HashMap<>();
+    List<File> selfNudgeFaces = new ArrayList<>();
+    Map<Long, File> otherNudgeFaces = new HashMap<>();
     // ------ 海猫all ------
     private BufferedImage oceanCatAll;
     // ------ listen ------
@@ -139,7 +139,7 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
                     if (!validAsImage(faceFile)) {
                         continue;
                     }
-                    selfNudgeFaces.add(ExternalResource.create(faceFile));
+                    selfNudgeFaces.add(faceFile);
                 }
                 log.info("load faces size = " + selfNudgeFaces.size());
             }
@@ -153,7 +153,7 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
                     try {
                         String idPart = faceFile.getName().substring(0, faceFile.getName().indexOf("."));
                         Long id = Long.valueOf(idPart);
-                        otherNudgeFaces.put(id, ExternalResource.create(faceFile));
+                        otherNudgeFaces.put(id, faceFile);
                         log.info("load specialNudgeFace of id = " + id);
                     } catch (Exception e) {
                         log.warning("无法作为specialNudgeFace：" + faceFile.getAbsolutePath());
@@ -231,14 +231,14 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
                 if (nudgeConfig.getNudgeReply() == NudgeReply.RANDOM_FACE) {
                     int index = rand.nextInt(selfNudgeFaces.size());
                     log.info("use selfNudgeFaces index = " + index);
-                    message = receiver.uploadImageAndCloseOrNotSupportPlaceholder(selfNudgeFaces.get(index));
+                    message = receiver.uploadImageAndCloseOrNotSupportPlaceholder(ExternalResource.create(selfNudgeFaces.get(index)));
                 } else if (nudgeConfig.getNudgeReply() == NudgeReply.PATPAT) {
                     message = nudgeReplyByPatPat(event);
                 } else {
                     message = new PlainText("未知的回应方式：" + nudgeConfig.getNudgeReply());
                 }
             } else if (otherNudgeFaces.containsKey(targetId)) {
-                ExternalResource specialNudgeFace = otherNudgeFaces.get(targetId);
+                ExternalResource specialNudgeFace = ExternalResource.create(otherNudgeFaces.get(targetId));
                 message = receiver.uploadImageAndCloseOrNotSupportPlaceholder(specialNudgeFace);
             } else {
                 // nudge-target is normal member, do nothing

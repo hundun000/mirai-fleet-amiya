@@ -102,7 +102,7 @@ public class AmiyaDefaultConfigAndData {
             List<ReminderItem> chatTexts = new ArrayList<>();
             chatTexts.add(create(0, "呜哇！？正好0点！今天是，由阿米娅来担当助理的工作呢。我不会辜负大家的。"));
             chatTexts.add(create(1, "凌晨一点到啦！凯尔希医生教导过我，工作的时候一定要保持全神贯注......嗯，全神贯注。"));
-            chatTexts.add(create(9, "九点到了。罗德岛全舰正处于通常航行状态。博士，整理下航程信息吧？", "阿米娅_交谈2.wav", "九点.png"));
+            chatTexts.add(create(9, "九点到了。罗德岛全舰正处于通常航行状态。博士，整理下航程信息吧？", "阿米娅_交谈2.amr", "九点.png"));
             chatTexts.add(create(10, "十点到了。欸嘿嘿......"));
             chatTexts.add(create(11, "十一点到了。欸嘿嘿......"));
             chatTexts.add(create(12, "十二点到了。欸嘿嘿......"));
