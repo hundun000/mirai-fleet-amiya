@@ -3,13 +3,12 @@ package hundun.miraifleet.arknights.amiya.botlogic;
 import hundun.miraifleet.arknights.amiya.botlogic.function.chat.AmiyaChatFunction;
 import hundun.miraifleet.arknights.amiya.botlogic.function.image.AmiyaImageFunction;
 import hundun.miraifleet.framework.core.botlogic.BaseJavaBotLogic;
-import hundun.miraifleet.framework.starter.botlogic.function.CharacterAdminHelperFunction;
-import hundun.miraifleet.framework.starter.botlogic.function.CharacterHelpFunction;
 import hundun.miraifleet.framework.starter.botlogic.function.RepeatFunction;
+import hundun.miraifleet.framework.starter.botlogic.function.character.CharacterAdminHelperFunction;
+import hundun.miraifleet.framework.starter.botlogic.function.character.CharacterHelpFunction;
 import hundun.miraifleet.framework.starter.botlogic.function.drive.DriveFunction;
 import hundun.miraifleet.framework.starter.botlogic.function.weibo.WeiboFunction;
 import hundun.miraifleet.image.share.function.SharedPetFunction;
-import hundun.miraifleet.music.share.function.music.MusicMidiFunction;
 import hundun.miraifleet.reminder.share.function.reminder.ReminderFunction;
 import net.mamoe.mirai.console.plugin.jvm.JavaPlugin;
 
@@ -48,7 +47,6 @@ public class AmiyaBotLogic extends BaseJavaBotLogic {
                 );
         
         registerFunction(new ReminderFunction(this, plugin, characterName, 
-                AmiyaDefaultConfigAndData.reminderListDefaultDataSupplier(),
                 AmiyaDefaultConfigAndData.hourlyChatConfigDefaultDataSupplier()
                 ));
         
@@ -58,7 +56,7 @@ public class AmiyaBotLogic extends BaseJavaBotLogic {
         registerFunction(new CharacterHelpFunction(this, plugin, characterName)
                 );
         
-        registerFunction(new MusicMidiFunction(this, plugin, characterName));
+        //registerFunction(new MusicMidiFunction(this, plugin, characterName));
         
         registerFunction(new CharacterAdminHelperFunction(this, plugin, characterName));
         

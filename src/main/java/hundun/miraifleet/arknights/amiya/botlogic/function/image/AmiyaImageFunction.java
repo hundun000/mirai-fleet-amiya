@@ -3,6 +3,7 @@ package hundun.miraifleet.arknights.amiya.botlogic.function.image;
 import hundun.miraifleet.framework.core.botlogic.BaseBotLogic;
 import hundun.miraifleet.framework.core.function.BaseFunction;
 import hundun.miraifleet.framework.core.function.FunctionReplyReceiver;
+import hundun.miraifleet.framework.core.function.BaseFunction.UserLevelFunctionComponentConstructPack;
 import hundun.miraifleet.image.share.function.SharedPetFunction;
 import lombok.Getter;
 import net.mamoe.mirai.console.command.AbstractCommand;
@@ -15,7 +16,7 @@ import xmmt.dituon.share.ImageSynthesis;
 
 import java.awt.image.BufferedImage;
 
-public class AmiyaImageFunction extends BaseFunction<Void>{
+public class AmiyaImageFunction extends BaseFunction {
 
     @Getter
     private final CompositeCommandFunctionComponent commandComponent;
@@ -31,8 +32,7 @@ public class AmiyaImageFunction extends BaseFunction<Void>{
                 baseBotLogic,
                 plugin,
                 characterName,
-                "AmiyaImageFunction",
-                null
+                "AmiyaImageFunction"
                 );
         this.commandComponent = new CompositeCommandFunctionComponent();
     }
@@ -49,7 +49,7 @@ public class AmiyaImageFunction extends BaseFunction<Void>{
 
     public class CompositeCommandFunctionComponent extends AbstractCompositeCommandFunctionComponent {
         public CompositeCommandFunctionComponent() {
-            super(plugin, botLogic, characterName, functionName);
+            super(plugin, botLogic, new UserLevelFunctionComponentConstructPack(characterName, functionName));
         }
         
         @SubCommand("玩test")
