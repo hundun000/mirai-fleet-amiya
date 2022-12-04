@@ -42,7 +42,7 @@ import net.mamoe.mirai.utils.ExternalResource;
  * Created on 2021/08/09
  */
 @AsListenerHost
-public class AmiyaChatFunction extends BaseFunction<Void> {
+public class AmiyaChatFunction extends BaseFunction {
     
     SingletonDocumentRepository<ListenConfig> listenConfigRepository;
     SingletonDocumentRepository<NudgeConfig> nudgeConfigRepository;
@@ -82,8 +82,7 @@ public class AmiyaChatFunction extends BaseFunction<Void> {
                 botLogic,
                 plugin, 
                 characterName, 
-                "AmiyaChatFunction", 
-                null
+                "AmiyaChatFunction"
                 );
         this.listenConfigRepository = new SingletonDocumentRepository<>(
                 plugin, 

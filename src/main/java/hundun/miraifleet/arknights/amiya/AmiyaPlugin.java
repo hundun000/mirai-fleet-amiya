@@ -19,7 +19,7 @@ public static final AmiyaPlugin INSTANCE = new AmiyaPlugin();
     public AmiyaPlugin() {
         super(new JvmPluginDescriptionBuilder(
                 "hundun.fleet.amiya",
-                "0.7.2-WIP"
+                "0.8.1"
             )
             .build());
     }

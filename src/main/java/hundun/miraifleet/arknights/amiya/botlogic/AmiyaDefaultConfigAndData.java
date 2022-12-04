@@ -11,10 +11,10 @@ import hundun.miraifleet.arknights.amiya.botlogic.function.chat.ListenConfig;
 import hundun.miraifleet.arknights.amiya.botlogic.function.chat.NudgeConfig;
 import hundun.miraifleet.arknights.amiya.botlogic.function.chat.NudgeConfig.NudgeReply;
 import hundun.miraifleet.framework.helper.repository.SingletonDocumentRepository;
+import hundun.miraifleet.framework.starter.botlogic.function.weibo.WeiboFunction;
 import hundun.miraifleet.framework.starter.botlogic.function.weibo.config.WeiboConfig;
 import hundun.miraifleet.framework.starter.botlogic.function.weibo.config.WeiboPushFilterFlag;
 import hundun.miraifleet.framework.starter.botlogic.function.weibo.config.WeiboViewFormat;
-import hundun.miraifleet.reminder.share.function.reminder.data.HourlyChatConfigV2;
 import hundun.miraifleet.reminder.share.function.reminder.data.ReminderItem;
 import hundun.miraifleet.reminder.share.function.reminder.data.ReminderList;
 
@@ -50,6 +50,9 @@ public class AmiyaDefaultConfigAndData {
     public static Supplier<WeiboConfig> weiboConfigDefaultDataSupplier() {
         return () -> {
             WeiboConfig weiboConfig = new WeiboConfig(
+                    WeiboFunction.DEFAULT_NONEWBLOGMESSAGETEMPLATE,
+                    WeiboFunction.DEFAULT_NEWBLOGMESSAGETEMPLATE,
+                    WeiboFunction.DEFAULT_SUMMARYBLOGMESSAGETEMPLATE,
                     mapOf(
                             "6279793937", WeiboViewFormat.ALL_IMAGE, 
                             "6441489862", WeiboViewFormat.NO_IMAGE,
@@ -62,15 +65,6 @@ public class AmiyaDefaultConfigAndData {
         };
     }
     
-    public static Supplier<ReminderList> reminderListDefaultDataSupplier() {
-        return () -> {
-            ReminderList reminderList = new ReminderList();
-            reminderList.setItems(Arrays.asList(
-                    ReminderItem.Factory.create("* 0 22 ? * 1", "现在是周日晚上10点。请博士记得完成本周剿灭作战。")
-                    ));
-            return reminderList;
-        };
-    }
     
     public static Supplier<ListenConfig> listenConfigDefaultDataSupplier() {
         return () -> {
@@ -96,9 +90,9 @@ public class AmiyaDefaultConfigAndData {
         };
     }
     
-    public static Supplier<HourlyChatConfigV2> hourlyChatConfigDefaultDataSupplier() {
+    public static Supplier<ReminderList> hourlyChatConfigDefaultDataSupplier() {
         return () -> {
-            HourlyChatConfigV2 hourlyChatConfig = new HourlyChatConfigV2();
+            ReminderList reminderList = new ReminderList();
             List<ReminderItem> chatTexts = new ArrayList<>();
             chatTexts.add(ReminderItem.Factory.createHourly(0, "呜哇！？正好0点！今天是，由阿米娅来担当助理的工作呢。我不会辜负大家的。"));
             chatTexts.add(ReminderItem.Factory.createHourly(1, "凌晨一点到啦！凯尔希医生教导过我，工作的时候一定要保持全神贯注......嗯，全神贯注。"));
@@ -118,8 +112,10 @@ public class AmiyaDefaultConfigAndData {
             chatTexts.add(ReminderItem.Factory.createHourly(22, "完全入夜了呢，二十二点到了。博士，您工作辛苦了。"));
             chatTexts.add(ReminderItem.Factory.createHourly(23, "二十三点到了。有什么想喝的吗，博士？"));
             
-            hourlyChatConfig.setItems(chatTexts);
-            return hourlyChatConfig;
+            chatTexts.add(ReminderItem.Factory.create("* 0 22 ? * 1", "现在是周日晚上10点。请博士记得完成本周剿灭作战。"));
+            
+            reminderList.setItems(chatTexts);
+            return reminderList;
         };
     }
 }
